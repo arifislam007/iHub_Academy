@@ -57,7 +57,10 @@ function checkAdminKey(req) {
 
 app.get('/api/contacts', async (req, res) => {
   // admin-only
+  const providedKey = req.headers['x-admin-key'] || req.query.adminKey;
+  console.log('/api/contacts GET called, x-admin-key present:', Boolean(providedKey));
   if (!checkAdminKey(req)) {
+    console.warn('Unauthorized admin request - provided:', providedKey ? '[REDACTED]' : 'none');
     return res.status(401).json({ error: 'Unauthorized' });
   }
 
@@ -115,6 +118,8 @@ app.get('/api/contacts/export', async (req, res) => {
 // Create new contact
 app.post('/api/contacts', async (req, res) => {
   const { name, email, message } = req.body;
+
+  console.log('/api/contacts POST called from', req.ip, 'headers x-admin-key present:', Boolean(req.headers['x-admin-key']));
 
   // Validation
   if (!name || !email || !message) {

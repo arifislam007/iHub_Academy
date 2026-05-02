@@ -7,8 +7,8 @@ export function Admin() {
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
 
-  const host = window.location.hostname;
-  const apiBase = host === 'localhost' || host === '127.0.0.1' ? 'http://localhost:3000' : `http://${host}:3000`;
+  const viteApi = (import.meta as any).env?.VITE_API_URL;
+  const apiBase = viteApi || '';
 
   const fetchContacts = async () => {
     setError('');
@@ -16,7 +16,9 @@ export function Admin() {
     try {
       window.sessionStorage.setItem('adminKey', key);
       setIsAuthorized(true);
-      const res = await fetch(`${apiBase}/api/contacts`, {
+      const url = `${apiBase}/api/contacts`;
+      console.debug('Admin fetchContacts', { url, keyProvided: Boolean(key) });
+      const res = await fetch(url, {
         headers: { 'x-admin-key': key },
       });
       if (!res.ok) {
