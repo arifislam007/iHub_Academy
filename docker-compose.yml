@@ -1,0 +1,54 @@
+services:
+  db:
+    image: postgres:16-alpine
+    container_name: skilldevelopmentacademy-db
+    environment:
+      POSTGRES_DB: ${POSTGRES_DB}
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+    volumes:
+      - db_data:/var/lib/postgresql/data
+      - ./init.sql:/docker-entrypoint-initdb.d/init.sql:ro
+    ports:
+      - "5432:5432"
+    restart: unless-stopped
+    networks:
+      - skill_network
+
+  api:
+    build:
+      context: .
+      dockerfile: backend.Dockerfile
+    container_name: skilldevelopmentacademy-api
+    environment:
+      DATABASE_URL: ${DATABASE_URL}
+      ADMIN_KEY: ${ADMIN_KEY}
+      NODE_ENV: production
+    ports:
+      - "3000:3000"
+    depends_on:
+      - db
+    restart: unless-stopped
+    networks:
+      - skill_network
+
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: skilldevelopmentacademy-app
+    ports:
+      - "8080:80"
+    environment: []
+    depends_on:
+      - api
+    restart: unless-stopped
+    networks:
+      - skill_network
+
+networks:
+  skill_network:
+    driver: bridge
+
+volumes:
+  db_data:
