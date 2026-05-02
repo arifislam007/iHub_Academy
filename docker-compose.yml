@@ -9,8 +9,8 @@ services:
     volumes:
       - db_data:/var/lib/postgresql/data
       - ./init.sql:/docker-entrypoint-initdb.d/init.sql:ro
-    ports:
-      - "5432:5432"
+    # ports:
+    #   - "5432:5432"
     restart: unless-stopped
     networks:
       - skill_network
@@ -24,8 +24,8 @@ services:
       DATABASE_URL: ${DATABASE_URL}
       ADMIN_KEY: ${ADMIN_KEY}
       NODE_ENV: production
-    ports:
-      - "3000:3000"
+    # ports:
+    #   - "3000:3000"
     depends_on:
       - db
     restart: unless-stopped
@@ -38,7 +38,7 @@ services:
       dockerfile: Dockerfile
     container_name: skilldevelopmentacademy-app
     ports:
-      - "8080:80"
+      - "3080:80"
     environment: []
     depends_on:
       - api
