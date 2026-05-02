@@ -22,13 +22,12 @@ export function Contact() {
     setSuccess(false);
 
     try {
-      // Compute API URL at runtime so browser always calls a reachable host.
-      const host = window.location.hostname;
-      const apiUrl = host === 'localhost' || host === '127.0.0.1'
-        ? 'http://localhost:3000'
-        : `http://${host}:3000`;
+      // Prefer a configured Vite env var in development/production.
+      // Fallback to same-origin `/api` so nginx can proxy to the backend in production.
+      const viteApi = (import.meta as any).env?.VITE_API_URL;
+      const apiBase = viteApi || '';
 
-      const response = await fetch(`${apiUrl}/api/contacts`, {
+      const response = await fetch(`${apiBase}/api/contacts`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
