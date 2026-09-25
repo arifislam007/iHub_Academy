@@ -56,7 +56,7 @@ export function AssetProgram() {
               Asset Program with <span className="text-sunrise">NSDA</span>
             </h2>
           </div>
-          <p className="text-lg leading-8 text-white/75 md:text-xl">
+          <p className="text-lg leading-8 text-white/85 md:text-xl">
             Professional certification programs in partnership with the National Skills Development Authority.
           </p>
         </motion.div>
@@ -79,7 +79,7 @@ export function AssetProgram() {
               </div>
 
               <h3 className="mt-6 text-2xl font-semibold leading-snug">{program.title}</h3>
-              <p className="mt-3 leading-relaxed text-ink/65">{program.description}</p>
+              <p className="mt-3 leading-relaxed text-ink/70">{program.description}</p>
 
               <ul className="mt-6 grid flex-1 grid-cols-2 content-start gap-x-3 gap-y-2.5">
                 {program.features.map((feature) => (
@@ -93,7 +93,7 @@ export function AssetProgram() {
               </ul>
 
               <div className="mt-7 flex items-center justify-between gap-3 border-t border-ink/10 pt-5">
-                <div className="text-sm font-semibold text-ink/65">
+                <div className="text-sm font-semibold text-ink/70">
                   <span className="flex items-center gap-1.5">
                     <Clock size={15} className="text-shonar" />
                     {program.duration}

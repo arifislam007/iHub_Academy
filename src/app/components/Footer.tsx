@@ -1,5 +1,13 @@
 import { Facebook, Instagram, Linkedin, Twitter, Mail, Phone, MapPin, GraduationCap } from 'lucide-react';
 
+// Add each profile URL to show its icon in the footer
+const socials = [
+  { Icon: Facebook, label: 'Facebook', url: '' },
+  { Icon: Instagram, label: 'Instagram', url: '' },
+  { Icon: Linkedin, label: 'LinkedIn', url: '' },
+  { Icon: Twitter, label: 'Twitter', url: '' },
+].filter((s) => s.url);
+
 export function Footer() {
   return (
     <footer className="bg-ink px-4 pt-16 pb-8 text-white">
@@ -51,27 +59,26 @@ export function Footer() {
             </ul>
           </div>
 
-          {/* Social Media */}
-          <div>
-            <h4 className="mb-4 text-sm font-bold uppercase tracking-[0.18em] text-sunrise">Follow Us</h4>
-            <div className="flex gap-2.5">
-              {[
-                { Icon: Facebook, label: 'Facebook' },
-                { Icon: Instagram, label: 'Instagram' },
-                { Icon: Linkedin, label: 'LinkedIn' },
-                { Icon: Twitter, label: 'Twitter' },
-              ].map(({ Icon, label }) => (
-                <a
-                  key={label}
-                  href="#"
-                  aria-label={label}
-                  className="rounded-xl bg-white/8 p-2.5 text-white/80 ring-1 ring-white/10 transition-all hover:-translate-y-0.5 hover:bg-sunrise hover:text-ink"
-                >
-                  <Icon size={19} />
-                </a>
-              ))}
+          {/* Social Media: only shown once real profile URLs are filled in */}
+          {socials.length > 0 && (
+            <div>
+              <h4 className="mb-4 text-sm font-bold uppercase tracking-[0.18em] text-sunrise">Follow Us</h4>
+              <div className="flex gap-2.5">
+                {socials.map(({ Icon, label, url }) => (
+                  <a
+                    key={label}
+                    href={url}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    aria-label={label}
+                    className="rounded-xl bg-white/8 p-2.5 text-white/80 ring-1 ring-white/10 transition-all hover:-translate-y-0.5 hover:bg-sunrise hover:text-ink"
+                  >
+                    <Icon size={19} />
+                  </a>
+                ))}
+              </div>
             </div>
-          </div>
+          )}
         </div>
 
         <div className="flex flex-col items-center justify-between gap-3 border-t border-white/10 pt-6 text-sm text-white/50 md:flex-row">

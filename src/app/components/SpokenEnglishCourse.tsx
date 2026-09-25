@@ -123,7 +123,7 @@ export function SpokenEnglishCourse() {
               </ul>
 
               <div className={`mt-6 border-t pt-5 ${course.popular ? 'border-white/15' : 'border-ink/10'}`}>
-                <p className={`text-xs font-semibold uppercase tracking-[0.16em] ${course.popular ? 'text-white/60' : 'text-ink/50'}`}>Fees</p>
+                <p className={`text-xs font-semibold uppercase tracking-[0.16em] ${course.popular ? 'text-white/85' : 'text-ink/70'}`}>Fees</p>
                 <p className="mt-1.5 text-sm">
                   Admission <span className="font-bold">2,000 TK</span>
                 </p>
@@ -152,7 +152,7 @@ export function SpokenEnglishCourse() {
         >
           <div className="max-w-sm">
             <h3 className="text-2xl font-semibold text-ink md:text-3xl">Who can join?</h3>
-            <p className="mt-2 text-ink/65">
+            <p className="mt-2 text-ink/70">
               Anyone who wants to improve English communication for career growth.
             </p>
           </div>

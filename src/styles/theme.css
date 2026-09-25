@@ -1,5 +1,3 @@
-@custom-variant dark (&:is(.dark *));
-
 :root {
   /* Brand palette — usage ratio: cream/mint 45% · green 30% · ink 12% · yellow 8% · lime 5% */
   --brand-green: #0B6E4F;      /* Shonar Green */
@@ -11,81 +9,7 @@
   --brand-mint: #E4F3EA;       /* Mint Mist */
   --brand-cream: #FBF8EF;      /* Paper Cream */
 
-  --font-size: 16px;
-  --background: var(--brand-cream);
-  --foreground: var(--brand-ink);
-  --card: #ffffff;
-  --card-foreground: var(--brand-ink);
-  --popover: #ffffff;
-  --popover-foreground: var(--brand-ink);
-  --primary: var(--brand-green);
-  --primary-foreground: #ffffff;
-  --secondary: var(--brand-mint);
-  --secondary-foreground: var(--brand-ink);
-  --muted: #F1EEE2;
-  --muted-foreground: #4A5E56;
-  --accent: var(--brand-yellow);
-  --accent-foreground: var(--brand-ink);
-  --destructive: #c2413f;
-  --destructive-foreground: #ffffff;
-  --border: rgba(14, 42, 34, 0.12);
-  --input: rgba(14, 42, 34, 0.16);
-  --input-background: #ffffff;
-  --switch-background: #b8cfc4;
-  --font-weight-medium: 500;
-  --font-weight-normal: 400;
-  --ring: var(--brand-green);
-  --chart-1: var(--brand-green);
-  --chart-2: var(--brand-lime);
-  --chart-3: var(--brand-yellow);
-  --chart-4: var(--brand-ink);
-  --chart-5: #5FA88A;
   --radius: 1rem;
-  --sidebar: var(--brand-cream);
-  --sidebar-foreground: var(--brand-ink);
-  --sidebar-primary: var(--brand-green);
-  --sidebar-primary-foreground: #ffffff;
-  --sidebar-accent: var(--brand-mint);
-  --sidebar-accent-foreground: var(--brand-ink);
-  --sidebar-border: rgba(14, 42, 34, 0.1);
-  --sidebar-ring: var(--brand-green);
-}
-
-.dark {
-  --background: #0f1726;
-  --foreground: #f7f3eb;
-  --card: rgba(17, 25, 39, 0.86);
-  --card-foreground: #f7f3eb;
-  --popover: #111927;
-  --popover-foreground: #f7f3eb;
-  --primary: #f7f3eb;
-  --primary-foreground: #111927;
-  --secondary: #23344b;
-  --secondary-foreground: #f7f3eb;
-  --muted: #243347;
-  --muted-foreground: #c7d2dc;
-  --accent: #1f4037;
-  --accent-foreground: #f7f3eb;
-  --destructive: oklch(0.396 0.141 25.723);
-  --destructive-foreground: oklch(0.637 0.237 25.331);
-  --border: rgba(247, 243, 235, 0.12);
-  --input: rgba(255, 255, 255, 0.08);
-  --ring: oklch(0.76 0.05 220);
-  --font-weight-medium: 500;
-  --font-weight-normal: 400;
-  --chart-1: oklch(0.7 0.11 222);
-  --chart-2: oklch(0.71 0.12 152);
-  --chart-3: oklch(0.84 0.11 80);
-  --chart-4: oklch(0.62 0.08 28);
-  --chart-5: oklch(0.55 0.08 260);
-  --sidebar: #111927;
-  --sidebar-foreground: #f7f3eb;
-  --sidebar-primary: #f7f3eb;
-  --sidebar-primary-foreground: #111927;
-  --sidebar-accent: #23344b;
-  --sidebar-accent-foreground: #f7f3eb;
-  --sidebar-border: rgba(247, 243, 235, 0.12);
-  --sidebar-ring: oklch(0.76 0.05 220);
 }
 
 @theme inline {
@@ -97,54 +21,20 @@
   --color-ink: var(--brand-ink);
   --color-mint: var(--brand-mint);
   --color-cream: var(--brand-cream);
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --color-card: var(--card);
-  --color-card-foreground: var(--card-foreground);
-  --color-popover: var(--popover);
-  --color-popover-foreground: var(--popover-foreground);
-  --color-primary: var(--primary);
-  --color-primary-foreground: var(--primary-foreground);
-  --color-secondary: var(--secondary);
-  --color-secondary-foreground: var(--secondary-foreground);
-  --color-muted: var(--muted);
-  --color-muted-foreground: var(--muted-foreground);
-  --color-accent: var(--accent);
-  --color-accent-foreground: var(--accent-foreground);
-  --color-destructive: var(--destructive);
-  --color-destructive-foreground: var(--destructive-foreground);
-  --color-border: var(--border);
-  --color-input: var(--input);
-  --color-input-background: var(--input-background);
-  --color-switch-background: var(--switch-background);
-  --color-ring: var(--ring);
-  --color-chart-1: var(--chart-1);
-  --color-chart-2: var(--chart-2);
-  --color-chart-3: var(--chart-3);
-  --color-chart-4: var(--chart-4);
-  --color-chart-5: var(--chart-5);
   --radius-sm: calc(var(--radius) - 4px);
   --radius-md: calc(var(--radius) - 2px);
   --radius-lg: var(--radius);
   --radius-xl: calc(var(--radius) + 4px);
-  --color-sidebar: var(--sidebar);
-  --color-sidebar-foreground: var(--sidebar-foreground);
-  --color-sidebar-primary: var(--sidebar-primary);
-  --color-sidebar-primary-foreground: var(--sidebar-primary-foreground);
-  --color-sidebar-accent: var(--sidebar-accent);
-  --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
-  --color-sidebar-border: var(--sidebar-border);
-  --color-sidebar-ring: var(--sidebar-ring);
 }
 
 @layer base {
   * {
-    @apply border-border outline-ring/50;
+    border-color: rgba(14, 42, 34, 0.12);
   }
 
   body {
     font-family: var(--font-body);
-    @apply bg-background text-foreground antialiased;
+    @apply bg-cream text-ink antialiased;
   }
 
   ::selection {
@@ -152,9 +42,29 @@
     color: var(--brand-ink);
   }
 
+  /* Green ring reads on light surfaces; yellow on the green/ink sections */
   :focus-visible {
-    outline: 3px solid var(--brand-yellow);
+    outline: 3px solid var(--brand-green);
     outline-offset: 2px;
+  }
+
+  .bg-shonar :focus-visible,
+  .bg-ink :focus-visible {
+    outline-color: var(--brand-yellow);
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    html {
+      scroll-behavior: auto !important;
+    }
+
+    *,
+    *::before,
+    *::after {
+      animation-duration: 0.01ms !important;
+      animation-iteration-count: 1 !important;
+      transition-duration: 0.01ms !important;
+    }
   }
 
   h1,
@@ -199,56 +109,52 @@
   * These are in @layer base, so Tailwind utility classes (like text-sm, text-lg) automatically override them.
   */
 
-  html {
-    font-size: var(--font-size);
-  }
-
   h1 {
     font-size: var(--text-2xl);
-    font-weight: var(--font-weight-medium);
+    font-weight: 500;
     line-height: 1.5;
   }
 
   h2 {
     font-size: var(--text-xl);
-    font-weight: var(--font-weight-medium);
+    font-weight: 500;
     line-height: 1.5;
   }
 
   h3 {
     font-size: var(--text-lg);
-    font-weight: var(--font-weight-medium);
+    font-weight: 500;
     line-height: 1.5;
   }
 
   h4 {
     font-size: var(--text-base);
-    font-weight: var(--font-weight-medium);
+    font-weight: 500;
     line-height: 1.5;
   }
 
   label {
     font-size: var(--text-base);
-    font-weight: var(--font-weight-medium);
+    font-weight: 500;
     line-height: 1.5;
   }
 
   button {
     font-size: var(--text-base);
-    font-weight: var(--font-weight-medium);
+    font-weight: 500;
     line-height: 1.5;
   }
 
   input {
     font-size: var(--text-base);
-    font-weight: var(--font-weight-normal);
+    font-weight: 400;
     line-height: 1.5;
   }
 }
 
 @layer components {
   .page-shell {
-    @apply min-h-screen overflow-x-hidden bg-cream text-ink;
+    @apply min-h-screen overflow-x-clip bg-cream text-ink;
   }
 
   .section-shell {
@@ -264,7 +170,7 @@
   }
 
   .section-eyebrow-dark {
-    @apply inline-flex items-center gap-2 rounded-full bg-white/10 px-4 py-1.5 text-xs font-bold uppercase tracking-[0.2em] text-sprout ring-1 ring-white/15;
+    @apply inline-flex items-center gap-2 rounded-full bg-white/10 px-4 py-1.5 text-xs font-bold uppercase tracking-[0.2em] text-white ring-1 ring-white/25;
   }
 
   .section-title {
@@ -283,10 +189,6 @@
 
   .surface-card {
     @apply rounded-3xl border border-ink/10 bg-white shadow-[0_24px_60px_-28px_rgba(14,42,34,0.35)];
-  }
-
-  .surface-card-soft {
-    @apply rounded-3xl border border-ink/8 bg-white/80 shadow-[0_12px_32px_-20px_rgba(14,42,34,0.3)];
   }
 
   .icon-tile {
@@ -310,6 +212,6 @@
   }
 
   .form-field {
-    @apply w-full rounded-xl border border-ink/15 bg-white px-4 py-3.5 text-ink placeholder:text-ink/40 transition-all focus:border-shonar focus:outline-none focus:ring-4 focus:ring-shonar/15;
+    @apply w-full rounded-xl border border-ink/15 bg-white px-4 py-3.5 text-ink placeholder:text-ink/55 transition-all focus:border-shonar focus:outline-none focus:ring-4 focus:ring-shonar/15;
   }
 }

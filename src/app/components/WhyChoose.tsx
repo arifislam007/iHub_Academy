@@ -61,7 +61,7 @@ export function WhyChoose() {
                 <reason.icon size={26} />
               </div>
               <h3 className="mt-6 text-xl font-semibold text-ink">{reason.title}</h3>
-              <p className="mt-2 leading-relaxed text-ink/65">{reason.description}</p>
+              <p className="mt-2 leading-relaxed text-ink/70">{reason.description}</p>
               <span className="absolute inset-x-0 bottom-0 h-1 origin-left scale-x-0 bg-sunrise transition-transform duration-300 group-hover:scale-x-100" />
             </motion.div>
           ))}

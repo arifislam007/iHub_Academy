@@ -1,34 +1,59 @@
-import React, { useState } from 'react';
+import { useEffect, useState } from 'react';
+
+type ContactRow = {
+  id: number;
+  name: string;
+  email: string;
+  message: string;
+  created_at: string;
+};
+
+const apiBase: string = (import.meta as { env?: { VITE_API_URL?: string } }).env?.VITE_API_URL || '';
+
+async function readError(res: Response) {
+  const data = await res.json().catch(() => ({} as { error?: string }));
+  if (res.status === 401) return 'Invalid admin key.';
+  if (res.status === 429) return data.error || 'Too many attempts. Please wait and try again.';
+  return data.error || `Request failed (${res.status})`;
+}
 
 export function Admin() {
-  const [key, setKey] = useState(() => window.sessionStorage.getItem('adminKey') || '');
-  const [isAuthorized, setIsAuthorized] = useState(Boolean(window.sessionStorage.getItem('adminKey')));
-  const [contacts, setContacts] = useState<any[]>([]);
+  // The key lives only in memory: it is never written to browser storage,
+  // so it is gone when the tab closes and cannot be read later by injected scripts.
+  const [key, setKey] = useState('');
+  const [isAuthorized, setIsAuthorized] = useState(false);
+  const [contacts, setContacts] = useState<ContactRow[]>([]);
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
 
-  const viteApi = (import.meta as any).env?.VITE_API_URL;
-  const apiBase = viteApi || '';
+  // Clean up a key saved to sessionStorage by earlier versions of this page
+  useEffect(() => {
+    try {
+      window.sessionStorage.removeItem('adminKey');
+    } catch {
+      // storage unavailable
+    }
+  }, []);
 
-  const fetchContacts = async () => {
+  const fetchContacts = async (e?: React.FormEvent) => {
+    e?.preventDefault();
+    if (!key) return;
     setError('');
     setLoading(true);
     try {
-      window.sessionStorage.setItem('adminKey', key);
-      setIsAuthorized(true);
-      const url = `${apiBase}/api/contacts`;
-      console.debug('Admin fetchContacts', { url, keyProvided: Boolean(key) });
-      const res = await fetch(url, {
+      const res = await fetch(`${apiBase}/api/contacts`, {
         headers: { 'x-admin-key': key },
+        signal: AbortSignal.timeout(15000),
       });
       if (!res.ok) {
-        const data = await res.json().catch(() => ({}));
-        throw new Error(data.error || `Status ${res.status}`);
+        throw new Error(await readError(res));
       }
-      const data = await res.json();
-      setContacts(data);
-    } catch (err: any) {
-      setError(err.message || 'Failed to fetch');
+      setContacts(await res.json());
+      setIsAuthorized(true);
+    } catch (err) {
+      setContacts([]);
+      setIsAuthorized(false);
+      setError(err instanceof Error ? err.message : 'Failed to fetch');
     } finally {
       setLoading(false);
     }
@@ -39,10 +64,10 @@ export function Admin() {
     try {
       const res = await fetch(`${apiBase}/api/contacts/export`, {
         headers: { 'x-admin-key': key },
+        signal: AbortSignal.timeout(30000),
       });
       if (!res.ok) {
-        const data = await res.json().catch(() => ({}));
-        throw new Error(data.error || `Status ${res.status}`);
+        throw new Error(await readError(res));
       }
       const blob = await res.blob();
       const url = URL.createObjectURL(blob);
@@ -53,9 +78,16 @@ export function Admin() {
       a.click();
       a.remove();
       URL.revokeObjectURL(url);
-    } catch (err: any) {
-      setError(err.message || 'Failed to download CSV');
+    } catch (err) {
+      setError(err instanceof Error ? err.message : 'Failed to download CSV');
     }
+  };
+
+  const signOut = () => {
+    setKey('');
+    setContacts([]);
+    setIsAuthorized(false);
+    setError('');
   };
 
   return (
@@ -72,32 +104,55 @@ export function Admin() {
         </div>
 
         <div className="surface-card p-6">
-          {!isAuthorized ? (
+          {!isAuthorized && (
             <div className="mb-6 rounded-2xl border border-amber-200 bg-amber-50 p-4 text-sm text-amber-900">
-              Enter the admin key to unlock saved contacts. The key is stored only in this browser session.
+              Enter the admin key to unlock saved contacts. The key is kept only while this page is open.
             </div>
-          ) : null}
+          )}
 
-          <div className="mb-4 flex flex-col gap-3 md:flex-row">
+          <form onSubmit={fetchContacts} className="mb-4 flex flex-col gap-3 md:flex-row">
+            <label htmlFor="admin-key" className="sr-only">Admin key</label>
             <input
+              id="admin-key"
               type="password"
               placeholder="Enter admin key"
+              autoComplete="current-password"
               value={key}
               onChange={(e) => setKey(e.target.value)}
-              className="w-full rounded-md border border-slate-200 px-3 py-2"
+              className="form-field md:flex-1"
             />
-            <button className="brand-button-primary px-4 py-2" onClick={fetchContacts} disabled={loading || !key}>
-              {loading ? 'Loading...' : 'Load'}
+            <button type="submit" className="brand-button-green px-6" disabled={loading || !key}>
+              {loading ? 'Loading...' : isAuthorized ? 'Refresh' : 'Load'}
             </button>
-            <button className="rounded-md border border-slate-200 px-4 py-2" onClick={downloadCsv} disabled={!contacts.length || !key}>
+            <button
+              type="button"
+              className="brand-button-secondary px-6 disabled:opacity-50"
+              onClick={downloadCsv}
+              disabled={!isAuthorized || !contacts.length}
+            >
               Download CSV
             </button>
-          </div>
+            {isAuthorized && (
+              <button type="button" className="brand-button-secondary px-6" onClick={signOut}>
+                Sign out
+              </button>
+            )}
+          </form>
 
-          {error && <div className="mb-4 text-sm text-red-600">{error}</div>}
+          {error && (
+            <div role="alert" className="mb-4 rounded-xl border border-red-200 bg-red-50 p-3 text-sm text-red-700">
+              {error}
+            </div>
+          )}
 
-          <div className="max-h-[70vh] overflow-auto rounded-md border border-slate-200">
-            <table className="w-full table-fixed text-sm">
+          {isAuthorized && (
+            <p className="mb-3 text-sm text-ink/70">
+              Showing the {contacts.length} most recent submission{contacts.length === 1 ? '' : 's'} (up to 100). Use CSV for the full list.
+            </p>
+          )}
+
+          <div className="max-h-[70vh] overflow-auto rounded-xl border border-ink/10">
+            <table className="w-full min-w-[720px] table-fixed text-sm">
               <thead className="sticky top-0 bg-mint text-ink">
                 <tr>
                   <th className="w-16 p-2 text-left">ID</th>
@@ -109,11 +164,11 @@ export function Admin() {
               </thead>
               <tbody>
                 {contacts.map((c) => (
-                  <tr key={c.id} className="odd:bg-white even:bg-slate-50">
+                  <tr key={c.id} className="odd:bg-white even:bg-cream">
                     <td className="p-2 align-top">{c.id}</td>
-                    <td className="p-2 align-top">{c.name}</td>
-                    <td className="p-2 align-top">{c.email}</td>
-                    <td className="p-2 align-top whitespace-pre-wrap">{c.message}</td>
+                    <td className="p-2 align-top break-words">{c.name}</td>
+                    <td className="p-2 align-top break-words">{c.email}</td>
+                    <td className="p-2 align-top whitespace-pre-wrap break-words">{c.message}</td>
                     <td className="p-2 align-top">{new Date(c.created_at).toLocaleString()}</td>
                   </tr>
                 ))}

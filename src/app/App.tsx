@@ -9,34 +9,39 @@ import Admin from "./components/Admin";
 import { Footer } from "./components/Footer";
 import { ScrollToTop } from "./components/ScrollToTop";
 import { useEffect, useState } from "react";
+import { MotionConfig } from "motion/react";
 
 export default function App() {
   const [showAdmin, setShowAdmin] = useState(typeof window !== 'undefined' && window.location.hash === '#admin');
 
   useEffect(() => {
-    document.documentElement.style.scrollBehavior = "smooth";
     const onHash = () => setShowAdmin(window.location.hash === '#admin');
     window.addEventListener('hashchange', onHash);
     return () => window.removeEventListener('hashchange', onHash);
   }, []);
 
   return (
-    <div className="page-shell">
-      {showAdmin ? (
-        <Admin />
-      ) : (
-        <>
-          <Navigation />
-          <Hero />
-          <ITCourses />
-          <SpokenEnglishCourse />
-          <AssetProgram />
-          <WhyChoose />
-          <Contact />
-          <Footer />
-          <ScrollToTop />
-        </>
-      )}
-    </div>
+    // Respect the OS "reduce motion" setting for all motion animations
+    <MotionConfig reducedMotion="user">
+      <div className="page-shell">
+        {showAdmin ? (
+          <Admin />
+        ) : (
+          <>
+            <Navigation />
+            <main>
+              <Hero />
+              <ITCourses />
+              <SpokenEnglishCourse />
+              <AssetProgram />
+              <WhyChoose />
+              <Contact />
+            </main>
+            <Footer />
+            <ScrollToTop />
+          </>
+        )}
+      </div>
+    </MotionConfig>
   );
 }

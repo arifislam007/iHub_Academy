@@ -1,13 +1,19 @@
+import crypto from 'node:crypto';
 import express from 'express';
 import cors from 'cors';
 import pg from 'pg';
 import dotenv from 'dotenv';
+import rateLimit from 'express-rate-limit';
 
 dotenv.config();
 
 const { Pool } = pg;
 const app = express();
 const port = process.env.PORT || 3000;
+
+// Input limits (keep in sync with maxLength in src/app/components/Contact.tsx)
+const LIMITS = { name: 100, email: 254, message: 2500 };
+const MIN_ADMIN_KEY_LENGTH = 32;
 
 // Database connection pool
 // Determine whether to use SSL for Postgres. Allow override with DB_SSL env var.
@@ -17,7 +23,8 @@ const useSsl = (process.env.DB_SSL === 'true') || (
 
 const pool = new Pool({
   connectionString: process.env.DATABASE_URL,
-  ssl: useSsl ? { rejectUnauthorized: false } : false,
+  // Verify the server certificate unless explicitly allowed (e.g. a self-signed dev DB).
+  ssl: useSsl ? { rejectUnauthorized: process.env.DB_SSL_ALLOW_SELF_SIGNED !== 'true' } : false,
 });
 
 async function waitForDatabase(retries = 20, delayMs = 1500) {
@@ -38,32 +45,74 @@ async function waitForDatabase(retries = 20, delayMs = 1500) {
   throw lastError;
 }
 
+// Requests arrive via the app's nginx container, which sets X-Forwarded-For to the
+// real client IP (resolved from the outer TLS proxy). Trust exactly that one hop.
+app.set('trust proxy', Number(process.env.TRUST_PROXY_HOPS ?? 1));
+app.disable('x-powered-by');
+
 // Middleware
-app.use(cors());
-app.use(express.json());
+// The site and API share an origin behind nginx, so CORS is only needed for local
+// development (e.g. ALLOWED_ORIGINS=http://localhost:5173). Unset = no cross-origin access.
+const allowedOrigins = (process.env.ALLOWED_ORIGINS || '')
+  .split(',')
+  .map((o) => o.trim())
+  .filter(Boolean);
+if (allowedOrigins.length) {
+  app.use(cors({ origin: allowedOrigins }));
+}
+app.use(express.json({ limit: '10kb' }));
+app.use((req, res, next) => {
+  res.setHeader('X-Content-Type-Options', 'nosniff');
+  res.setHeader('Cache-Control', 'no-store');
+  next();
+});
+
+// Public form: 5 submissions per IP per 15 minutes
+const submitLimiter = rateLimit({
+  windowMs: 15 * 60 * 1000,
+  limit: 5,
+  standardHeaders: 'draft-7',
+  legacyHeaders: false,
+  message: { error: 'Too many submissions. Please try again later or call 01835350647.' },
+});
+
+// Admin routes: slow down key guessing
+const adminLimiter = rateLimit({
+  windowMs: 15 * 60 * 1000,
+  limit: 30,
+  standardHeaders: 'draft-7',
+  legacyHeaders: false,
+  message: { error: 'Too many requests. Please try again later.' },
+});
 
 // Health check endpoint
 app.get('/health', (req, res) => {
   res.json({ status: 'ok', timestamp: new Date().toISOString() });
 });
 
-// Get all contacts (for admin panel - optional)
-// Simple admin auth helper - expects header `x-admin-key` matching ADMIN_KEY env var
+// Admin auth: header `x-admin-key` must match ADMIN_KEY (timing-safe).
+// The key is never accepted from the query string, since URLs end up in logs.
 function checkAdminKey(req) {
   const adminKey = process.env.ADMIN_KEY || '';
-  const provided = req.headers['x-admin-key'] || req.query.adminKey;
-  return adminKey && provided && provided === adminKey;
+  if (adminKey.length < MIN_ADMIN_KEY_LENGTH) return false;
+
+  const provided = req.headers['x-admin-key'];
+  if (typeof provided !== 'string') return false;
+
+  const expected = crypto.createHash('sha256').update(adminKey).digest();
+  const actual = crypto.createHash('sha256').update(provided).digest();
+  return crypto.timingSafeEqual(expected, actual);
 }
 
-app.get('/api/contacts', async (req, res) => {
-  // admin-only
-  const providedKey = req.headers['x-admin-key'] || req.query.adminKey;
-  console.log('/api/contacts GET called, x-admin-key present:', Boolean(providedKey));
+function requireAdmin(req, res, next) {
   if (!checkAdminKey(req)) {
-    console.warn('Unauthorized admin request - provided:', providedKey ? '[REDACTED]' : 'none');
     return res.status(401).json({ error: 'Unauthorized' });
   }
+  next();
+}
 
+// Get recent contacts (admin-only)
+app.get('/api/contacts', adminLimiter, requireAdmin, async (req, res) => {
   try {
     const result = await pool.query(
       'SELECT id, name, email, message, created_at FROM contacts ORDER BY created_at DESC LIMIT 100'
@@ -75,67 +124,80 @@ app.get('/api/contacts', async (req, res) => {
   }
 });
 
-// CSV export (admin-only)
-app.get('/api/contacts/export', async (req, res) => {
-  if (!checkAdminKey(req)) {
-    return res.status(401).json({ error: 'Unauthorized' });
+// Neutralise values that spreadsheet apps would evaluate as formulas (CSV injection)
+function escapeCsv(val) {
+  if (val === null || val === undefined) return '';
+  let s = val instanceof Date ? val.toISOString() : String(val);
+  if (/^[=+\-@\t\r]/.test(s)) {
+    s = `'${s}`;
   }
+  if (/[",\n\r]/.test(s)) {
+    return '"' + s.replace(/"/g, '""') + '"';
+  }
+  return s;
+}
 
+// CSV export (admin-only)
+app.get('/api/contacts/export', adminLimiter, requireAdmin, async (req, res) => {
   try {
     const result = await pool.query(
       'SELECT id, name, email, message, created_at FROM contacts ORDER BY created_at DESC'
     );
 
-    // Convert rows to CSV
     const rows = result.rows;
     const headers = ['id', 'name', 'email', 'message', 'created_at'];
 
-    const escapeCsv = (val) => {
-      if (val === null || val === undefined) return '';
-      const s = String(val);
-      if (s.includes('"') || s.includes(',') || s.includes('\n') || s.includes('\r')) {
-        return '"' + s.replace(/"/g, '""') + '"';
-      }
-      return s;
-    };
-
     const csvLines = [headers.join(',')];
     for (const r of rows) {
-      const line = headers.map(h => escapeCsv(r[h])).join(',');
-      csvLines.push(line);
+      csvLines.push(headers.map((h) => escapeCsv(r[h])).join(','));
     }
 
-    const csv = csvLines.join('\n');
-    res.setHeader('Content-Type', 'text/csv');
+    res.setHeader('Content-Type', 'text/csv; charset=utf-8');
     res.setHeader('Content-Disposition', 'attachment; filename="contacts_export.csv"');
-    res.send(csv);
+    res.send(csvLines.join('\n'));
   } catch (error) {
     console.error('Error exporting contacts:', error);
     res.status(500).json({ error: 'Failed to export contacts' });
   }
 });
 
-// Create new contact
-app.post('/api/contacts', async (req, res) => {
-  const { name, email, message } = req.body;
+// Create new contact (public)
+app.post('/api/contacts', submitLimiter, async (req, res) => {
+  const { name, email, message, website } = req.body ?? {};
 
-  console.log('/api/contacts POST called from', req.ip, 'headers x-admin-key present:', Boolean(req.headers['x-admin-key']));
+  // Honeypot: real users never see or fill the hidden `website` field.
+  // Pretend success so bots don't learn they were filtered.
+  if (website) {
+    return res.status(201).json({ success: true, message: 'Contact submitted successfully' });
+  }
 
   // Validation
-  if (!name || !email || !message) {
+  if (typeof name !== 'string' || typeof email !== 'string' || typeof message !== 'string') {
     return res.status(400).json({ error: 'Name, email, and message are required' });
+  }
+
+  const cleanName = name.trim();
+  const cleanEmail = email.trim();
+  const cleanMessage = message.trim();
+
+  if (!cleanName || !cleanEmail || !cleanMessage) {
+    return res.status(400).json({ error: 'Name, email, and message are required' });
+  }
+
+  if (cleanName.length > LIMITS.name || cleanEmail.length > LIMITS.email || cleanMessage.length > LIMITS.message) {
+    return res.status(400).json({ error: 'One or more fields are too long' });
   }
 
   // Basic email validation
   const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-  if (!emailRegex.test(email)) {
+  if (!emailRegex.test(cleanEmail)) {
     return res.status(400).json({ error: 'Invalid email format' });
   }
 
   try {
     const result = await pool.query(
       'INSERT INTO contacts (name, email, message) VALUES ($1, $2, $3) RETURNING id, created_at',
-      [name, email, message]
+      [cleanName, cleanEmail, cleanMessage]
     );
 
     res.status(201).json({
@@ -150,29 +212,19 @@ app.post('/api/contacts', async (req, res) => {
   }
 });
 
-// Get single contact by ID
-app.get('/api/contacts/:id', async (req, res) => {
-  const { id } = req.params;
-
-  try {
-    const result = await pool.query(
-      'SELECT id, name, email, message, created_at FROM contacts WHERE id = $1',
-      [id]
-    );
-
-    if (result.rows.length === 0) {
-      return res.status(404).json({ error: 'Contact not found' });
-    }
-
-    res.json(result.rows[0]);
-  } catch (error) {
-    console.error('Error fetching contact:', error);
-    res.status(500).json({ error: 'Failed to fetch contact' });
-  }
+// Unknown API routes
+app.use('/api', (req, res) => {
+  res.status(404).json({ error: 'Not found' });
 });
 
-// Error handling middleware
+// Error handling middleware (e.g. malformed or oversized JSON bodies)
 app.use((err, req, res, next) => {
+  if (err.type === 'entity.too.large') {
+    return res.status(413).json({ error: 'Request too large' });
+  }
+  if (err.type === 'entity.parse.failed') {
+    return res.status(400).json({ error: 'Invalid request body' });
+  }
   console.error('Unhandled error:', err);
   res.status(500).json({ error: 'Internal server error' });
 });
@@ -180,6 +232,10 @@ app.use((err, req, res, next) => {
 // Start server
 (async () => {
   try {
+    if ((process.env.ADMIN_KEY || '').length < MIN_ADMIN_KEY_LENGTH) {
+      console.warn(`ADMIN_KEY is missing or shorter than ${MIN_ADMIN_KEY_LENGTH} characters: admin endpoints are disabled.`);
+    }
+
     await waitForDatabase();
 
     app.listen(port, () => {

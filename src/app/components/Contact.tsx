@@ -1,5 +1,5 @@
 import { MapPin, Phone, Clock, Mail, Send, CheckCircle2 } from 'lucide-react';
-import { useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { motion } from 'motion/react';
 
 export function Contact() {
@@ -10,16 +10,22 @@ export function Contact() {
     course: '',
     message: '',
   });
+  // Honeypot: hidden from people, often filled in by spam bots
+  const [website, setWebsite] = useState('');
 
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
   const [success, setSuccess] = useState(false);
+  const successTimer = useRef<ReturnType<typeof setTimeout>>();
+
+  useEffect(() => () => clearTimeout(successTimer.current), []);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setLoading(true);
     setError('');
     setSuccess(false);
+    clearTimeout(successTimer.current);
 
     try {
       // Prefer a configured Vite env var in development/production.
@@ -36,12 +42,18 @@ export function Contact() {
           name: formData.fullName,
           email: formData.email,
           message: `Phone: ${formData.phone}\nCourse: ${formData.course}\n\n${formData.message}`,
+          website,
         }),
+        signal: AbortSignal.timeout(15000),
       });
 
       if (!response.ok) {
-        const errorData = await response.json();
-        throw new Error(errorData.error || 'Failed to submit form');
+        // Error pages from the proxy (502/504) are HTML, not JSON
+        const errorData = await response.json().catch(() => ({}));
+        if (response.status === 429) {
+          throw new Error(errorData.error || 'Too many submissions. Please try again later or call 01835350647.');
+        }
+        throw new Error(errorData.error || 'Could not submit right now. Please try again or call 01835350647.');
       }
 
       setSuccess(true);
@@ -54,9 +66,15 @@ export function Contact() {
       });
 
       // Reset success message after 5 seconds
-      setTimeout(() => setSuccess(false), 5000);
+      successTimer.current = setTimeout(() => setSuccess(false), 5000);
     } catch (err) {
-      setError(err instanceof Error ? err.message : 'An error occurred while submitting the form');
+      if (err instanceof DOMException && (err.name === 'TimeoutError' || err.name === 'AbortError')) {
+        setError('The server is taking too long to respond. Please try again or call 01835350647.');
+      } else if (err instanceof TypeError) {
+        setError('Network error. Please check your connection and try again.');
+      } else {
+        setError(err instanceof Error ? err.message : 'An error occurred while submitting the form');
+      }
       console.error('Form submission error:', err);
     } finally {
       setLoading(false);
@@ -105,7 +123,7 @@ export function Contact() {
                       <item.icon size={22} />
                     </div>
                     <div>
-                      <h3 className="text-xs font-bold uppercase tracking-[0.16em] text-ink/50">{item.title}</h3>
+                      <h3 className="text-xs font-bold uppercase tracking-[0.16em] text-ink/70">{item.title}</h3>
                       {item.lines.map((line) => (
                         <p key={line} className={`mt-0.5 font-semibold ${item.href ? 'text-shonar' : 'text-ink'}`}>{line}</p>
                       ))}
@@ -132,7 +150,21 @@ export function Contact() {
             <form onSubmit={handleSubmit} className="surface-card relative overflow-hidden p-6 md:p-9">
               <div className="absolute inset-x-0 top-0 h-1.5 bg-[linear-gradient(90deg,var(--brand-green)_0_70%,var(--brand-lime)_70%_88%,var(--brand-yellow)_88%)]" />
               <h3 className="text-2xl font-semibold text-ink">Admission form</h3>
-              <p className="mt-1 text-sm text-ink/60">Share your information and we will call you back.</p>
+              <p className="mt-1 text-sm text-ink/70">Share your information and we will call you back.</p>
+
+              {/* Honeypot field, hidden from people and screen readers */}
+              <div aria-hidden="true" className="absolute -left-[9999px] h-px w-px overflow-hidden">
+                <label htmlFor="website">Website</label>
+                <input
+                  type="text"
+                  id="website"
+                  name="website"
+                  tabIndex={-1}
+                  autoComplete="off"
+                  value={website}
+                  onChange={(e) => setWebsite(e.target.value)}
+                />
+              </div>
 
               <div className="mt-7 grid gap-5 sm:grid-cols-2">
                 <div className="sm:col-span-2">
@@ -147,6 +179,7 @@ export function Contact() {
                     onChange={handleChange}
                     placeholder="Enter your name"
                     autoComplete="name"
+                    maxLength={100}
                     required
                     className="form-field"
                   />
@@ -164,6 +197,7 @@ export function Contact() {
                     onChange={handleChange}
                     placeholder="you@example.com"
                     autoComplete="email"
+                    maxLength={254}
                     required
                     className="form-field"
                   />
@@ -181,6 +215,9 @@ export function Contact() {
                     onChange={handleChange}
                     placeholder="01XXXXXXXXX"
                     autoComplete="tel"
+                    maxLength={20}
+                    pattern="[0-9+\-\s]{6,20}"
+                    title="Phone number: digits, +, - or spaces"
                     required
                     className="form-field"
                   />
@@ -227,7 +264,7 @@ export function Contact() {
 
                 <div className="sm:col-span-2">
                   <label htmlFor="message" className="mb-2 block text-sm font-semibold text-ink/80">
-                    Message <span className="font-normal text-ink/45">(optional)</span>
+                    Message <span className="font-normal text-ink/70">(optional)</span>
                   </label>
                   <textarea
                     id="message"
@@ -236,6 +273,7 @@ export function Contact() {
                     onChange={handleChange}
                     placeholder="Tell us more about your interest"
                     rows={4}
+                    maxLength={2000}
                     className="form-field resize-none"
                   />
                 </div>

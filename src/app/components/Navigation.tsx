@@ -17,9 +17,28 @@ export function Navigation() {
     const handleScroll = () => {
       setIsScrolled(window.scrollY > 20);
     };
-    window.addEventListener('scroll', handleScroll);
+    handleScroll();
+    window.addEventListener('scroll', handleScroll, { passive: true });
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
+
+  // Close the mobile menu on Escape, or when the viewport grows to desktop width
+  useEffect(() => {
+    if (!isMenuOpen) return;
+    const onKey = (e: KeyboardEvent) => {
+      if (e.key === 'Escape') setIsMenuOpen(false);
+    };
+    const desktop = window.matchMedia('(min-width: 1024px)');
+    const onResize = () => {
+      if (desktop.matches) setIsMenuOpen(false);
+    };
+    window.addEventListener('keydown', onKey);
+    desktop.addEventListener('change', onResize);
+    return () => {
+      window.removeEventListener('keydown', onKey);
+      desktop.removeEventListener('change', onResize);
+    };
+  }, [isMenuOpen]);
 
   return (
     <nav className={`sticky top-0 z-50 transition-all duration-300 ${
@@ -36,7 +55,7 @@ export function Navigation() {
               <span className="block font-[family-name:var(--font-display)] text-lg font-semibold text-ink">
                 Sombhabona <span className="text-shonar">iHub</span>
               </span>
-              <span className="block text-[0.68rem] font-semibold uppercase tracking-[0.2em] text-ink/55">
+              <span className="block text-[0.68rem] font-semibold uppercase tracking-[0.2em] text-ink/70">
                 Future-ready skills
               </span>
             </div>
@@ -69,13 +88,14 @@ export function Navigation() {
             onClick={() => setIsMenuOpen(!isMenuOpen)}
             aria-label="Toggle navigation menu"
             aria-expanded={isMenuOpen}
+            aria-controls="mobile-menu"
           >
             {isMenuOpen ? <X size={24} /> : <Menu size={24} />}
           </button>
         </div>
 
         {isMenuOpen && (
-          <div className="space-y-1 pb-5 lg:hidden">
+          <div id="mobile-menu" className="space-y-1 pb-5 lg:hidden">
             {links.map((link) => (
               <a
                 key={link.href}

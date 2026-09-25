@@ -86,6 +86,19 @@ export function ITCourses() {
   const [active, setActive] = useState<(typeof tabs)[number]['id']>('foundation');
   const current = tabs.find((t) => t.id === active)!;
 
+  // WAI-ARIA tabs: arrow keys / Home / End move between tabs
+  const onTabKeyDown = (e: React.KeyboardEvent<HTMLButtonElement>, index: number) => {
+    let next = -1;
+    if (e.key === 'ArrowRight') next = (index + 1) % tabs.length;
+    else if (e.key === 'ArrowLeft') next = (index - 1 + tabs.length) % tabs.length;
+    else if (e.key === 'Home') next = 0;
+    else if (e.key === 'End') next = tabs.length - 1;
+    if (next < 0) return;
+    e.preventDefault();
+    setActive(tabs[next].id);
+    document.getElementById(`it-tab-${tabs[next].id}`)?.focus();
+  };
+
   return (
     <section className="section-pad relative bg-mint" id="it-courses">
       <div className="section-shell">
@@ -109,15 +122,19 @@ export function ITCourses() {
         </motion.div>
 
         <div className="mb-10 flex justify-center">
-          <div role="tablist" className="inline-flex rounded-full bg-white p-1.5 ring-1 ring-ink/8">
-            {tabs.map((tab) => (
+          <div role="tablist" aria-label="Course level" className="inline-flex rounded-full bg-white p-1.5 ring-1 ring-ink/8">
+            {tabs.map((tab, index) => (
               <button
                 key={tab.id}
+                id={`it-tab-${tab.id}`}
                 role="tab"
+                aria-controls="it-tabpanel"
+                tabIndex={active === tab.id ? 0 : -1}
+                onKeyDown={(e) => onTabKeyDown(e, index)}
                 aria-selected={active === tab.id}
                 onClick={() => setActive(tab.id)}
                 className={`relative rounded-full px-5 py-2.5 text-sm font-bold transition-colors sm:px-7 ${
-                  active === tab.id ? 'text-white' : 'text-ink/65 hover:text-shonar'
+                  active === tab.id ? 'text-white' : 'text-ink/70 hover:text-shonar'
                 }`}
               >
                 {active === tab.id && (
@@ -136,7 +153,10 @@ export function ITCourses() {
         <AnimatePresence mode="wait">
           <motion.div
             key={active}
+            id="it-tabpanel"
             role="tabpanel"
+            aria-labelledby={`it-tab-${active}`}
+            tabIndex={0}
             initial={{ opacity: 0, y: 16 }}
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: -8 }}
@@ -152,7 +172,7 @@ export function ITCourses() {
                   <course.icon size={24} />
                 </div>
                 <h3 className="mt-5 text-xl font-semibold leading-snug text-ink">{course.title}</h3>
-                <p className="mt-2 flex-1 text-sm leading-relaxed text-ink/65">{course.description}</p>
+                <p className="mt-2 flex-1 text-sm leading-relaxed text-ink/70">{course.description}</p>
 
                 <div className="mt-5 flex flex-wrap gap-2">
                   <span className="pill bg-mint text-shonar">
@@ -167,7 +187,7 @@ export function ITCourses() {
                   )}
                 </div>
                 {course.schedule && (
-                  <p className="mt-3 flex items-center gap-1.5 text-xs font-semibold text-ink/60">
+                  <p className="mt-3 flex items-center gap-1.5 text-xs font-semibold text-ink/70">
                     <CalendarDays size={14} className="text-shonar" />
                     {course.schedule}
                   </p>
@@ -181,7 +201,7 @@ export function ITCourses() {
                   {course.learnMoreHref && (
                     <a
                       href={course.learnMoreHref}
-                      className="inline-flex items-center gap-1 text-xs font-semibold text-ink/60 underline-offset-4 hover:text-ink hover:underline"
+                      className="inline-flex items-center gap-1 text-xs font-semibold text-ink/70 underline-offset-4 hover:text-ink hover:underline"
                     >
                       <FileText size={14} />
                       Syllabus

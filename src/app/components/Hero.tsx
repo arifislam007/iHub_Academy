@@ -117,20 +117,20 @@ export function Hero() {
 
                 <div className="mt-6 grid gap-3 sm:grid-cols-2">
                   <div className="rounded-2xl bg-white/10 p-5 ring-1 ring-white/15">
-                    <div className="flex items-center gap-2 text-sm text-white/75">
+                    <div className="flex items-center gap-2 text-sm text-white/85">
                       <Users size={16} />
                       Small batch mentoring
                     </div>
                     <p className="mt-2 text-3xl font-extrabold text-sunrise">1:15</p>
-                    <p className="mt-1 text-sm text-white/70">Focused teacher support in every class.</p>
+                    <p className="mt-1 text-sm text-white/85">Focused teacher support in every class.</p>
                   </div>
                   <div className="rounded-2xl bg-cream p-5 text-ink">
-                    <div className="flex items-center gap-2 text-sm text-ink/60">
+                    <div className="flex items-center gap-2 text-sm text-ink/70">
                       <Clock3 size={16} />
                       Class rhythm
                     </div>
                     <p className="mt-2 text-2xl font-extrabold">Weekend friendly</p>
-                    <p className="mt-1 text-sm text-ink/65">For students, job holders & freelancers.</p>
+                    <p className="mt-1 text-sm text-ink/70">For students, job holders & freelancers.</p>
                   </div>
                 </div>
 
@@ -138,7 +138,7 @@ export function Hero() {
                   {stats.map((stat) => (
                     <div key={stat.label} className="px-2 text-center">
                       <p className="text-2xl font-extrabold">{stat.number}</p>
-                      <p className="mt-1 text-[0.68rem] font-semibold uppercase leading-tight tracking-[0.12em] text-white/65">{stat.label}</p>
+                      <p className="mt-1 text-[0.68rem] font-semibold uppercase leading-tight tracking-[0.12em] text-white/85">{stat.label}</p>
                     </div>
                   ))}
                 </div>
@@ -157,7 +157,7 @@ export function Hero() {
               </div>
               <div>
                 <p className="text-sm font-bold text-ink">NSDA Partner</p>
-                <p className="text-xs text-ink/60">Govt. certified programs</p>
+                <p className="text-xs text-ink/70">Govt. certified programs</p>
               </div>
             </motion.div>
 
