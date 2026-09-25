@@ -1,15 +1,25 @@
-import { Monitor, TrendingUp, Wrench, Laptop, Terminal, Award, Container, Cloud, ArrowRight } from 'lucide-react';
-import { motion } from 'motion/react';
+import { Monitor, TrendingUp, Sparkles, Laptop, Terminal, Award, Container, Cloud, ArrowRight, Clock, MapPin, Flame, FileText, CalendarDays } from 'lucide-react';
+import { motion, AnimatePresence } from 'motion/react';
+import { useState } from 'react';
+
+type Course = {
+  title: string;
+  description: string;
+  duration: string;
+  mode?: string;
+  schedule?: string;
+  icon: typeof Monitor;
+  learnMoreHref?: string;
+};
 
 export function ITCourses() {
-  const foundationCourses = [
+  const foundationCourses: Course[] = [
     {
       title: 'Graphic Design & Freelancing',
       description: 'Master Photoshop and design workflows to start freelancing confidently.',
       duration: '2 Months',
       mode: 'Online/Offline',
       icon: Monitor,
-      color: 'from-pink-500 to-rose-500',
     },
     {
       title: 'Digital Marketing & Freelancing',
@@ -17,34 +27,32 @@ export function ITCourses() {
       duration: '3 Months',
       mode: 'Online/Offline',
       icon: TrendingUp,
-      color: 'from-blue-500 to-cyan-500',
     },
     {
-      title: 'IT Support',
-      description: 'Develop troubleshooting and system support skills for modern workplaces.',
-      duration: '1.5 Months',
-      mode: 'Offline',
-      icon: Wrench,
-      color: 'from-orange-500 to-amber-500',
+      title: 'AI Integrated Office Course',
+      description: 'Work smarter in Word, Excel, and PowerPoint using AI tools for writing, data, and presentations.',
+      duration: '20 Days',
+      schedule: '1.5 hrs/class · 3 days/week',
+      icon: Sparkles,
     },
     {
-      title: 'Basic Computer Operation',
-      description: 'Build confidence with core computer, internet, and office productivity tasks.',
-      duration: '1 Month',
+      title: 'Basic Computer Operation with IT Support',
+      description: 'Build confidence with core computer, internet, and office tasks plus hands-on troubleshooting and system support.',
+      duration: '25 Days',
+      schedule: '1.5 hrs/class · 6 days/week',
       mode: 'Online/Offline',
       icon: Laptop,
-      color: 'from-green-500 to-emerald-500',
     },
   ];
 
-  const advancedCourses = [
+  const advancedCourses: Course[] = [
     {
-      title: 'Linux Operation for Beginner',
+      title: 'Beginner Linux',
       description: 'Learn Linux fundamentals, shell commands, and server basics through labs.',
-      duration: '2 Months',
+      duration: '3 Months',
       mode: 'Online/Offline',
       icon: Terminal,
-      color: 'from-purple-500 to-indigo-500',
+      learnMoreHref: '/linux_info.html',
     },
     {
       title: 'RHCSA & RHCE Exam Preparation',
@@ -52,7 +60,7 @@ export function ITCourses() {
       duration: '3 Months',
       mode: 'Offline',
       icon: Award,
-      color: 'from-red-500 to-pink-500',
+      learnMoreHref: '/linux_info.html',
     },
     {
       title: 'DevOps & Docker',
@@ -60,7 +68,6 @@ export function ITCourses() {
       duration: '3 Months',
       mode: 'Online/Offline',
       icon: Container,
-      color: 'from-cyan-500 to-blue-500',
     },
     {
       title: 'AWS Cloud for Beginner',
@@ -68,102 +75,123 @@ export function ITCourses() {
       duration: '2 Months',
       mode: 'Online/Offline',
       icon: Cloud,
-      color: 'from-yellow-500 to-orange-500',
     },
   ];
 
-  return (
-    <section className="py-20 px-4 bg-white relative overflow-hidden">
-      {/* Background decoration */}
-      <div className="absolute top-0 right-0 w-96 h-96 bg-purple-200 rounded-full blur-3xl opacity-20" />
-      <div className="absolute bottom-0 left-0 w-96 h-96 bg-blue-200 rounded-full blur-3xl opacity-20" />
+  const tabs = [
+    { id: 'foundation', label: 'Foundation', courses: foundationCourses },
+    { id: 'advanced', label: 'Advanced & Certification', courses: advancedCourses },
+  ] as const;
 
-      <div className="max-w-7xl mx-auto relative z-10">
+  const [active, setActive] = useState<(typeof tabs)[number]['id']>('foundation');
+  const current = tabs.find((t) => t.id === active)!;
+
+  return (
+    <section className="section-pad relative bg-mint" id="it-courses">
+      <div className="section-shell">
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
           transition={{ duration: 0.6 }}
-          className="text-center mb-16"
+          className="mb-12 text-center"
         >
-          <div className="inline-block bg-gradient-to-r from-orange-500 to-pink-500 text-white px-6 py-2 rounded-full mb-6 text-sm font-semibold">
-            🔥 50% OFF ON SELECTED PROGRAMS
-          </div>
-          <h2 className="text-4xl md:text-5xl mb-4 bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">
-            IT & Professional Courses
+          <span className="pill mb-5 bg-sunrise px-4 py-1.5 text-ink">
+            <Flame size={14} />
+            50% off on selected programs
+          </span>
+          <h2 className="section-title">
+            IT & Professional <span className="highlight">Courses</span>
           </h2>
-          <p className="text-xl text-gray-600 max-w-2xl mx-auto">
-            Practical, hands-on training designed for the modern digital workplace
+          <p className="section-lede mt-4">
+            Practical, hands-on training designed for the modern digital workplace.
           </p>
         </motion.div>
 
-        <div className="mb-20">
-          <h3 className="text-3xl mb-10 text-center">Foundation Courses</h3>
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
-            {foundationCourses.map((course, index) => (
-              <motion.div
-                key={index}
-                initial={{ opacity: 0, y: 20 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }}
-                transition={{ duration: 0.5, delay: index * 0.1 }}
-                whileHover={{ y: -10 }}
-                className="group bg-white rounded-2xl p-8 shadow-lg hover:shadow-2xl transition-all border border-gray-100 relative overflow-hidden"
+        <div className="mb-10 flex justify-center">
+          <div role="tablist" className="inline-flex rounded-full bg-white p-1.5 ring-1 ring-ink/8">
+            {tabs.map((tab) => (
+              <button
+                key={tab.id}
+                role="tab"
+                aria-selected={active === tab.id}
+                onClick={() => setActive(tab.id)}
+                className={`relative rounded-full px-5 py-2.5 text-sm font-bold transition-colors sm:px-7 ${
+                  active === tab.id ? 'text-white' : 'text-ink/65 hover:text-shonar'
+                }`}
               >
-                <div className="absolute top-0 right-0 w-32 h-32 bg-gradient-to-br from-blue-100 to-purple-100 rounded-bl-full opacity-50" />
-                <div className="relative z-10">
-                  <div className={`bg-gradient-to-br ${course.color} p-4 rounded-2xl inline-block mb-4 group-hover:scale-110 transition-transform`}>
-                    <course.icon className="text-white" size={32} />
-                  </div>
-                  <h4 className="text-xl mb-3 font-semibold text-gray-900">{course.title}</h4>
-                  <p className="text-gray-600 mb-6 text-sm leading-relaxed min-h-[60px]">{course.description}</p>
-                  <div className="flex justify-between items-center mb-6 text-sm">
-                    <span className="bg-blue-50 text-blue-600 px-3 py-1 rounded-full font-medium">{course.duration}</span>
-                    <span className="text-gray-500">{course.mode}</span>
-                  </div>
-                  <a href="#contact" className="w-full bg-gradient-to-r from-blue-600 to-purple-600 text-white py-3 rounded-xl font-semibold hover:shadow-lg transition-all flex items-center justify-center gap-2 group-hover:gap-3">
-                    Learn More
-                    <ArrowRight size={18} />
-                  </a>
-                </div>
-              </motion.div>
+                {active === tab.id && (
+                  <motion.span
+                    layoutId="it-tab"
+                    className="absolute inset-0 rounded-full bg-shonar"
+                    transition={{ type: 'spring', stiffness: 400, damping: 32 }}
+                  />
+                )}
+                <span className="relative">{tab.label}</span>
+              </button>
             ))}
           </div>
         </div>
 
-        <div>
-          <h3 className="text-3xl mb-10 text-center">Advanced & Certification</h3>
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
-            {advancedCourses.map((course, index) => (
-              <motion.div
-                key={index}
-                initial={{ opacity: 0, y: 20 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }}
-                transition={{ duration: 0.5, delay: index * 0.1 }}
-                whileHover={{ y: -10 }}
-                className="group bg-gradient-to-br from-purple-50 via-blue-50 to-pink-50 rounded-2xl p-8 shadow-lg hover:shadow-2xl transition-all border-2 border-purple-200 relative overflow-hidden"
+        <AnimatePresence mode="wait">
+          <motion.div
+            key={active}
+            role="tabpanel"
+            initial={{ opacity: 0, y: 16 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: -8 }}
+            transition={{ duration: 0.3 }}
+            className="grid grid-cols-1 gap-5 md:grid-cols-2 lg:grid-cols-4"
+          >
+            {current.courses.map((course) => (
+              <div
+                key={course.title}
+                className="surface-card group flex flex-col p-6 transition-all duration-300 hover:-translate-y-1.5 hover:border-shonar/40"
               >
-                <div className="absolute top-0 right-0 w-24 h-24 bg-gradient-to-br from-purple-300 to-pink-300 rounded-full blur-2xl opacity-30" />
-                <div className="relative z-10">
-                  <div className={`bg-gradient-to-br ${course.color} p-4 rounded-2xl inline-block mb-4 group-hover:scale-110 transition-transform`}>
-                    <course.icon className="text-white" size={32} />
-                  </div>
-                  <h4 className="text-xl mb-3 font-semibold text-gray-900">{course.title}</h4>
-                  <p className="text-gray-600 mb-6 text-sm leading-relaxed min-h-[60px]">{course.description}</p>
-                  <div className="flex justify-between items-center mb-6 text-sm">
-                    <span className="bg-purple-100 text-purple-600 px-3 py-1 rounded-full font-medium">{course.duration}</span>
-                    <span className="text-gray-500">{course.mode}</span>
-                  </div>
-                  <a href="#contact" className="w-full bg-gradient-to-r from-purple-600 to-pink-600 text-white py-3 rounded-xl font-semibold hover:shadow-lg transition-all flex items-center justify-center gap-2 group-hover:gap-3">
-                    Learn More
-                    <ArrowRight size={18} />
-                  </a>
+                <div className="icon-tile group-hover:bg-shonar group-hover:text-white">
+                  <course.icon size={24} />
                 </div>
-              </motion.div>
+                <h3 className="mt-5 text-xl font-semibold leading-snug text-ink">{course.title}</h3>
+                <p className="mt-2 flex-1 text-sm leading-relaxed text-ink/65">{course.description}</p>
+
+                <div className="mt-5 flex flex-wrap gap-2">
+                  <span className="pill bg-mint text-shonar">
+                    <Clock size={12} />
+                    {course.duration}
+                  </span>
+                  {course.mode && (
+                    <span className="pill bg-cream text-ink/70 ring-1 ring-ink/10">
+                      <MapPin size={12} />
+                      {course.mode}
+                    </span>
+                  )}
+                </div>
+                {course.schedule && (
+                  <p className="mt-3 flex items-center gap-1.5 text-xs font-semibold text-ink/60">
+                    <CalendarDays size={14} className="text-shonar" />
+                    {course.schedule}
+                  </p>
+                )}
+
+                <div className="mt-6 flex items-center justify-between border-t border-ink/10 pt-4">
+                  <a href="#contact" className="inline-flex items-center gap-1.5 text-sm font-bold text-shonar transition-all group-hover:gap-2.5">
+                    Enroll now
+                    <ArrowRight size={16} />
+                  </a>
+                  {course.learnMoreHref && (
+                    <a
+                      href={course.learnMoreHref}
+                      className="inline-flex items-center gap-1 text-xs font-semibold text-ink/60 underline-offset-4 hover:text-ink hover:underline"
+                    >
+                      <FileText size={14} />
+                      Syllabus
+                    </a>
+                  )}
+                </div>
+              </div>
             ))}
-          </div>
-        </div>
+          </motion.div>
+        </AnimatePresence>
       </div>
     </section>
   );

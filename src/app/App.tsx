@@ -28,8 +28,8 @@ export default function App() {
         <>
           <Navigation />
           <Hero />
-          <SpokenEnglishCourse />
           <ITCourses />
+          <SpokenEnglishCourse />
           <AssetProgram />
           <WhyChoose />
           <Contact />

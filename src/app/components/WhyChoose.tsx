@@ -7,81 +7,62 @@ export function WhyChoose() {
       icon: Target,
       title: 'Practical Training',
       description: 'Hands-on practice with real-world projects, not just theory.',
-      color: 'from-blue-500 to-cyan-500',
     },
     {
       icon: Users,
       title: 'Small Batches',
       description: 'Limited seats ensure individual attention for every student.',
-      color: 'from-purple-500 to-pink-500',
     },
     {
       icon: Award,
       title: 'Certificate',
       description: 'Get recognized for your skills with our completion certificates.',
-      color: 'from-orange-500 to-amber-500',
     },
     {
       icon: Briefcase,
       title: 'Career Support',
       description: 'Guidance for jobs, freelancing, and international marketplace success.',
-      color: 'from-green-500 to-emerald-500',
     },
   ];
 
   return (
-    <section className="py-20 px-4 bg-gradient-to-b from-white to-gray-50" id="why-us">
-      <div className="max-w-7xl mx-auto">
+    <section className="section-pad bg-cream" id="why-us">
+      <div className="section-shell">
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
           transition={{ duration: 0.6 }}
-          className="text-center mb-16"
+          className="mb-14 text-center"
         >
-          <div className="inline-block bg-gradient-to-r from-blue-600 to-purple-600 text-white px-6 py-2 rounded-full mb-6 text-sm font-semibold">
-            OUR STRENGTHS
-          </div>
-          <h2 className="text-4xl md:text-5xl mb-4 bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">
-            Why Choose Sombhabona?
+          <span className="section-eyebrow mb-5">Our strengths</span>
+          <h2 className="section-title">
+            Why choose <span className="text-shonar">Sombhabona</span>?
           </h2>
-          <p className="text-xl text-gray-600 max-w-2xl mx-auto">
-            Experience excellence in education with our unique approach to skill development
+          <p className="section-lede mt-4">
+            Excellence in education through a practical, people-first approach to skill development.
           </p>
         </motion.div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+        <div className="grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-4">
           {reasons.map((reason, index) => (
             <motion.div
-              key={index}
+              key={reason.title}
               initial={{ opacity: 0, y: 30 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
               transition={{ duration: 0.5, delay: index * 0.1 }}
-              whileHover={{ y: -10, scale: 1.02 }}
-              className="group bg-white rounded-3xl p-8 shadow-lg hover:shadow-2xl transition-all text-center relative overflow-hidden"
+              className="group relative overflow-hidden rounded-3xl bg-white p-7 ring-1 ring-ink/8 transition-all duration-300 hover:-translate-y-1.5 hover:shadow-[0_30px_60px_-30px_rgba(14,42,34,0.45)]"
             >
-              {/* Animated gradient background */}
-              <motion.div
-                className={`absolute inset-0 bg-gradient-to-br ${reason.color} opacity-0 group-hover:opacity-5 transition-opacity duration-300`}
-              />
-
-              <div className="relative z-10">
-                <div className="flex justify-center mb-6">
-                  <motion.div
-                    whileHover={{ rotate: 360 }}
-                    transition={{ duration: 0.6 }}
-                    className={`bg-gradient-to-br ${reason.color} p-5 rounded-2xl shadow-lg`}
-                  >
-                    <reason.icon className="text-white" size={36} />
-                  </motion.div>
-                </div>
-                <h3 className="text-2xl mb-4 font-bold text-gray-900">{reason.title}</h3>
-                <p className="text-gray-600 leading-relaxed">{reason.description}</p>
+              <span className="absolute right-6 top-5 font-[family-name:var(--font-display)] text-5xl font-semibold text-mint transition-colors group-hover:text-sprout/40">
+                0{index + 1}
+              </span>
+              <div className="icon-tile h-14 w-14 group-hover:bg-shonar group-hover:text-white">
+                <reason.icon size={26} />
               </div>
-
-              {/* Decorative corner accent */}
-              <div className={`absolute -bottom-2 -right-2 w-24 h-24 bg-gradient-to-br ${reason.color} rounded-tl-full opacity-10`} />
+              <h3 className="mt-6 text-xl font-semibold text-ink">{reason.title}</h3>
+              <p className="mt-2 leading-relaxed text-ink/65">{reason.description}</p>
+              <span className="absolute inset-x-0 bottom-0 h-1 origin-left scale-x-0 bg-sunrise transition-transform duration-300 group-hover:scale-x-100" />
             </motion.div>
           ))}
         </div>

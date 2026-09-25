@@ -1,83 +1,144 @@
-import { BookOpen, Mic, Users, Video, MessageCircle, UserCheck, Star } from 'lucide-react';
+import { BookOpen, Mic, Video, MessageCircle, UserCheck, Star, Hammer, CalendarDays, Clock, ArrowRight, GraduationCap, Briefcase, Laptop, School, Building2 } from 'lucide-react';
 import { motion } from 'motion/react';
 
 export function SpokenEnglishCourse() {
   const features = [
-    { icon: BookOpen, text: 'Learning by Doing', color: 'from-blue-500 to-cyan-500' },
-    { icon: BookOpen, text: 'Grammar & Vocabulary', color: 'from-purple-500 to-pink-500' },
-    { icon: Mic, text: 'Public Speaking', color: 'from-orange-500 to-red-500' },
-    { icon: Video, text: 'Multimedia Classroom', color: 'from-green-500 to-emerald-500' },
-    { icon: MessageCircle, text: 'Language Club', color: 'from-yellow-500 to-orange-500' },
-    { icon: UserCheck, text: 'Personal Mentoring', color: 'from-indigo-500 to-purple-500' },
+    { icon: Hammer, text: 'Learning by Doing' },
+    { icon: BookOpen, text: 'Grammar & Vocabulary' },
+    { icon: Mic, text: 'Public Speaking' },
+    { icon: Video, text: 'Multimedia Classroom' },
+    { icon: MessageCircle, text: 'Language Club' },
+    { icon: UserCheck, text: 'Personal Mentoring' },
   ];
 
   const courses = [
     {
-      level: '1. Beginner',
+      step: '01',
+      level: 'Beginner',
       duration: '3 Months',
-      schedule: 'Fri & Sat (2 Hrs/Class)',
-      fee: 'Adm: 2,000 / Monthly: 1,500 TK',
+      schedule: 'Fri & Sat · 2 hrs/class',
       popular: false,
     },
     {
-      level: '2. Intermediate',
+      step: '02',
+      level: 'Intermediate',
       duration: '3 Months',
-      schedule: 'Fri & Sat (2 Hrs/Class)',
-      fee: 'Adm: 2,000 / Monthly: 1,500 TK',
+      schedule: 'Fri & Sat · 2 hrs/class',
       popular: false,
     },
     {
-      level: '3. Advanced',
+      step: '03',
+      level: 'Advanced',
       duration: '3 Months',
-      schedule: 'Fri & Sat (2 Hrs/Class)',
-      fee: 'Adm: 2,000 / Monthly: 1,500 TK',
+      schedule: 'Fri & Sat · 2 hrs/class',
       popular: false,
     },
     {
-      level: '4. Full Programme',
+      step: '04',
+      level: 'Full Programme',
       duration: '9 Months',
-      schedule: 'Fri & Sat (2 Hrs/Class)',
-      fee: 'Adm: 2,000 / Monthly: 1,500 TK',
+      schedule: 'Fri & Sat · 2 hrs/class',
       popular: true,
     },
   ];
 
+  const audiences = [
+    { icon: School, label: 'School & College Students' },
+    { icon: GraduationCap, label: 'University Students' },
+    { icon: Briefcase, label: 'Job Seekers' },
+    { icon: Laptop, label: 'Freelancers' },
+    { icon: Building2, label: 'Professionals' },
+  ];
+
   return (
-    <section className="py-20 px-4 bg-gradient-to-b from-gray-50 to-white" id="courses">
-      <div className="max-w-7xl mx-auto">
+    <section className="section-pad relative bg-cream" id="courses">
+      <div className="section-shell">
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
           transition={{ duration: 0.6 }}
-          className="text-center mb-16"
+          className="mb-14 grid gap-6 lg:grid-cols-[1fr_auto] lg:items-end"
         >
-          <div className="inline-block bg-gradient-to-r from-blue-600 to-purple-600 text-white px-6 py-2 rounded-full mb-6 text-sm font-semibold">
-            FEATURED COURSE
+          <div>
+            <span className="section-eyebrow mb-5">Featured course</span>
+            <h2 className="section-title">
+              Spoken English <span className="text-shonar">Course</span>
+            </h2>
+            <p className="mt-4 max-w-2xl text-lg leading-8 text-ink/70 md:text-xl">
+              Better English, better future. A practical, interactive course for real-life success.
+            </p>
           </div>
-          <h2 className="text-4xl md:text-5xl mb-4 bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">
-            Spoken English Course
-          </h2>
-          <p className="text-xl text-gray-600 max-w-2xl mx-auto">
-            Better English, Better Future. A practical and interactive course for real-life success.
-          </p>
+          <div className="flex flex-wrap gap-2 lg:max-w-md lg:justify-end">
+            {features.map((feature) => (
+              <span key={feature.text} className="pill bg-white px-3.5 py-2 text-sm text-ink/80 ring-1 ring-ink/8">
+                <feature.icon size={15} className="text-shonar" />
+                {feature.text}
+              </span>
+            ))}
+          </div>
         </motion.div>
 
-        <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-6 mb-16">
-          {features.map((feature, index) => (
+        <div className="grid grid-cols-1 gap-5 md:grid-cols-2 lg:grid-cols-4">
+          {courses.map((course, index) => (
             <motion.div
-              key={index}
-              initial={{ opacity: 0, y: 20 }}
+              key={course.level}
+              initial={{ opacity: 0, y: 24 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
-              transition={{ duration: 0.5, delay: index * 0.1 }}
-              whileHover={{ scale: 1.05, y: -5 }}
-              className="bg-white p-6 rounded-2xl shadow-lg hover:shadow-xl transition-all text-center group cursor-pointer"
+              transition={{ duration: 0.5, delay: index * 0.08 }}
+              className={`group relative flex flex-col rounded-3xl p-7 transition-all duration-300 hover:-translate-y-1.5 ${
+                course.popular
+                  ? 'bg-shonar text-white shadow-[0_30px_60px_-30px_rgba(11,110,79,0.9)]'
+                  : 'bg-white text-ink shadow-[0_16px_40px_-28px_rgba(14,42,34,0.45)] ring-1 ring-ink/8 hover:ring-shonar/40'
+              }`}
             >
-              <div className={`bg-gradient-to-br ${feature.color} p-3 rounded-xl inline-block mb-4 group-hover:scale-110 transition-transform`}>
-                <feature.icon className="text-white" size={28} />
+              {course.popular && (
+                <span className="pill absolute -top-3 right-6 bg-sunrise text-ink shadow-md">
+                  <Star size={12} fill="currentColor" />
+                  Most Popular
+                </span>
+              )}
+
+              <div className="flex items-baseline justify-between">
+                <span className={`font-[family-name:var(--font-display)] text-5xl font-semibold ${course.popular ? 'text-sprout' : 'text-shonar/25'}`}>
+                  {course.step}
+                </span>
+                <span className={`pill ${course.popular ? 'bg-white/15 text-white' : 'bg-mint text-shonar'}`}>
+                  {course.duration}
+                </span>
               </div>
-              <p className="text-sm font-medium text-gray-700">{feature.text}</p>
+
+              <h3 className="mt-4 text-2xl font-semibold">{course.level}</h3>
+
+              <ul className={`mt-5 space-y-3 text-sm ${course.popular ? 'text-white/80' : 'text-ink/70'}`}>
+                <li className="flex items-center gap-2.5">
+                  <CalendarDays size={16} className={course.popular ? 'text-sprout' : 'text-shonar'} />
+                  {course.schedule}
+                </li>
+                <li className="flex items-center gap-2.5">
+                  <Clock size={16} className={course.popular ? 'text-sprout' : 'text-shonar'} />
+                  Duration: {course.duration}
+                </li>
+              </ul>
+
+              <div className={`mt-6 border-t pt-5 ${course.popular ? 'border-white/15' : 'border-ink/10'}`}>
+                <p className={`text-xs font-semibold uppercase tracking-[0.16em] ${course.popular ? 'text-white/60' : 'text-ink/50'}`}>Fees</p>
+                <p className="mt-1.5 text-sm">
+                  Admission <span className="font-bold">2,000 TK</span>
+                </p>
+                <p className="text-sm">
+                  Monthly <span className={`text-xl font-extrabold ${course.popular ? 'text-sunrise' : 'text-shonar'}`}>1,500 TK</span>
+                </p>
+              </div>
+
+              <a
+                href="#contact"
+                className={`mt-6 ${course.popular ? 'brand-button-primary' : 'brand-button-secondary'} w-full`}
+              >
+                Enroll Now
+                <ArrowRight size={16} className="transition-transform group-hover:translate-x-0.5" />
+              </a>
             </motion.div>
           ))}
         </div>
@@ -87,71 +148,22 @@ export function SpokenEnglishCourse() {
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
           transition={{ duration: 0.6 }}
-          className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-12"
+          className="mt-10 flex flex-col gap-6 rounded-3xl bg-white p-7 ring-1 ring-ink/8 md:p-9 lg:flex-row lg:items-center lg:justify-between"
         >
-          {courses.map((course, index) => (
-            <div
-              key={index}
-              className={`relative bg-white rounded-2xl p-8 shadow-lg hover:shadow-2xl transition-all border-2 ${
-                course.popular ? 'border-purple-500' : 'border-transparent hover:border-purple-200'
-              }`}
-            >
-              {course.popular && (
-                <div className="absolute -top-4 left-1/2 -translate-x-1/2 bg-gradient-to-r from-yellow-400 to-orange-400 text-white px-4 py-1 rounded-full text-sm font-semibold flex items-center gap-1">
-                  <Star size={14} fill="currentColor" />
-                  Most Popular
-                </div>
-              )}
-              <div className="text-center mb-6">
-                <h3 className="text-2xl mb-2 bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">
-                  {course.level}
-                </h3>
-              </div>
-              <div className="space-y-4 mb-6">
-                <div className="flex items-center justify-between">
-                  <span className="text-gray-600">Duration:</span>
-                  <span className="font-semibold text-gray-900">{course.duration}</span>
-                </div>
-                <div className="flex items-center justify-between">
-                  <span className="text-gray-600">Schedule:</span>
-                  <span className="font-semibold text-gray-900 text-sm">{course.schedule}</span>
-                </div>
-                <div className="pt-4 border-t border-gray-200">
-                  <div className="text-center">
-                    <p className="text-sm text-gray-600 mb-1">Fees</p>
-                    <p className="text-lg font-bold text-purple-600">{course.fee}</p>
-                  </div>
-                </div>
-              </div>
-              <a href="#contact" className={`w-full py-3 rounded-xl font-semibold transition-all text-center block ${
-                course.popular
-                  ? 'bg-gradient-to-r from-blue-600 to-purple-600 text-white hover:shadow-lg hover:scale-105'
-                  : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
-              }`}>
-                Enroll Now
-              </a>
-            </div>
-          ))}
-        </motion.div>
-
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          transition={{ duration: 0.6 }}
-          className="bg-gradient-to-br from-blue-50 to-purple-50 p-10 rounded-3xl border border-purple-100"
-        >
-          <h3 className="text-3xl mb-4 bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">
-            Who Can Join?
-          </h3>
-          <p className="text-gray-700 leading-relaxed text-lg">
-            This course is perfect for <span className="font-semibold text-purple-600">School & College Students</span>,
-            <span className="font-semibold text-purple-600"> University Students</span>,
-            <span className="font-semibold text-purple-600"> Job Seekers</span>,
-            <span className="font-semibold text-purple-600"> Freelancers</span>, and
-            <span className="font-semibold text-purple-600"> Professionals</span> who want to improve their English communication skills
-            for career growth.
-          </p>
+          <div className="max-w-sm">
+            <h3 className="text-2xl font-semibold text-ink md:text-3xl">Who can join?</h3>
+            <p className="mt-2 text-ink/65">
+              Anyone who wants to improve English communication for career growth.
+            </p>
+          </div>
+          <div className="flex flex-wrap gap-2.5">
+            {audiences.map((a) => (
+              <span key={a.label} className="pill bg-cream px-4 py-2.5 text-sm text-ink ring-1 ring-ink/10">
+                <a.icon size={16} className="text-shonar" />
+                {a.label}
+              </span>
+            ))}
+          </div>
         </motion.div>
       </div>
     </section>

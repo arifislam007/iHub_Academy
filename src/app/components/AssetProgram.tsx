@@ -1,110 +1,111 @@
-import { Award, TrendingUp, Palette, Headphones, CheckCircle, Download } from 'lucide-react';
+import { ShieldCheck, TrendingUp, Palette, Headphones, Check, Download, ArrowRight, Clock, CalendarDays } from 'lucide-react';
 import { motion } from 'motion/react';
 
 export function AssetProgram() {
   const programs = [
     {
-      title: 'Digital Marketing for Freelancing - Level 3',
+      title: 'Digital Marketing for Freelancing',
+      level: 'Level 3',
       description: 'Turn clicks into customers with SEO, paid ads, content strategy, and analytics-driven growth.',
       duration: '3 Months',
-      type: 'Asset Program',
+      schedule: '4 hrs/day · 6 days/week',
       icon: TrendingUp,
-      color: 'from-blue-500 to-cyan-500',
       features: ['SEO Mastery', 'Paid Advertising', 'Content Strategy', 'Analytics'],
     },
     {
-      title: 'Graphics Design for Freelancing - Level 3',
+      title: 'Graphics Design for Freelancing',
+      level: 'Level 3',
       description: 'Master advanced Photoshop/Illustrator, brand identity, and visual storytelling for premium clients.',
       duration: '3 Months',
-      type: 'Asset Program',
+      schedule: '4 hrs/day · 6 days/week',
       icon: Palette,
-      color: 'from-purple-500 to-pink-500',
       features: ['Photoshop Pro', 'Illustrator', 'Brand Identity', 'Portfolio'],
     },
     {
-      title: 'IT Support - Level 3',
+      title: 'IT Support',
+      level: 'Level 3',
       description: 'Build technical support expertise in hardware, networking, cloud basics, security, and OS management.',
       duration: '3 Months',
-      type: 'Asset Program',
+      schedule: '4 hrs/day · 6 days/week',
       icon: Headphones,
-      color: 'from-orange-500 to-red-500',
       features: ['Hardware', 'Networking', 'Cloud Basics', 'Security'],
     },
   ];
 
   return (
-    <section className="py-20 px-4 bg-gradient-to-br from-green-50 via-emerald-50 to-teal-50 relative overflow-hidden" id="admission">
-      {/* Background decorations */}
-      <div className="absolute top-20 left-0 w-72 h-72 bg-green-200 rounded-full blur-3xl opacity-30" />
-      <div className="absolute bottom-20 right-0 w-96 h-96 bg-teal-200 rounded-full blur-3xl opacity-30" />
+    <section className="section-pad relative overflow-hidden bg-shonar text-white" id="admission">
+      <div className="pointer-events-none absolute inset-0">
+        <div className="absolute -right-40 -top-40 h-[32rem] w-[32rem] rounded-full bg-sprout/15 blur-2xl" />
+        <div className="absolute -bottom-32 -left-24 h-96 w-96 rounded-full bg-ink/25 blur-2xl" />
+      </div>
 
-      <div className="max-w-7xl mx-auto relative z-10">
+      <div className="section-shell relative z-10">
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
           transition={{ duration: 0.6 }}
-          className="text-center mb-16"
+          className="mb-14 grid gap-8 lg:grid-cols-[1.2fr_1fr] lg:items-end"
         >
-          <div className="flex justify-center mb-6">
-            <div className="bg-gradient-to-br from-green-500 to-emerald-500 p-4 rounded-2xl">
-              <Award className="text-white" size={48} />
-            </div>
+          <div>
+            <span className="section-eyebrow-dark mb-5">
+              <ShieldCheck size={14} />
+              Government certified
+            </span>
+            <h2 className="section-title text-white">
+              Asset Program with <span className="text-sunrise">NSDA</span>
+            </h2>
           </div>
-          <div className="inline-block bg-gradient-to-r from-green-600 to-emerald-600 text-white px-6 py-2 rounded-full mb-6 text-sm font-semibold">
-            GOVERNMENT CERTIFIED
-          </div>
-          <h2 className="text-4xl md:text-5xl mb-4 bg-gradient-to-r from-green-600 to-teal-600 bg-clip-text text-transparent">
-            Asset Program With NSDA
-          </h2>
-          <p className="text-xl text-gray-600 max-w-2xl mx-auto">
-            Professional certification programs in partnership with National Skills Development Authority
+          <p className="text-lg leading-8 text-white/75 md:text-xl">
+            Professional certification programs in partnership with the National Skills Development Authority.
           </p>
         </motion.div>
 
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-8 mb-12">
+        <div className="grid grid-cols-1 gap-6 md:grid-cols-3">
           {programs.map((program, index) => (
             <motion.div
-              key={index}
+              key={program.title}
               initial={{ opacity: 0, y: 30 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
-              transition={{ duration: 0.5, delay: index * 0.2 }}
-              whileHover={{ y: -10 }}
-              className="group bg-white rounded-3xl p-8 shadow-xl hover:shadow-2xl transition-all relative overflow-hidden"
+              transition={{ duration: 0.5, delay: index * 0.12 }}
+              className="group flex flex-col rounded-3xl bg-cream p-7 text-ink shadow-[0_30px_60px_-30px_rgba(14,42,34,0.7)] transition-transform duration-300 hover:-translate-y-1.5"
             >
-              {/* Gradient overlay */}
-              <div className={`absolute top-0 right-0 w-40 h-40 bg-gradient-to-br ${program.color} rounded-bl-full opacity-10`} />
-
-              <div className="relative z-10">
-                <div className={`bg-gradient-to-br ${program.color} p-4 rounded-2xl inline-block mb-4 group-hover:scale-110 transition-transform`}>
-                  <program.icon className="text-white" size={32} />
+              <div className="flex items-start justify-between">
+                <div className="icon-tile h-14 w-14 bg-shonar text-white">
+                  <program.icon size={26} />
                 </div>
+                <span className="pill bg-ink text-sprout">NSDA {program.level}</span>
+              </div>
 
-                <div className="bg-green-100 text-green-700 px-4 py-1 rounded-full text-xs font-semibold inline-block mb-4">
-                  {program.type}
+              <h3 className="mt-6 text-2xl font-semibold leading-snug">{program.title}</h3>
+              <p className="mt-3 leading-relaxed text-ink/65">{program.description}</p>
+
+              <ul className="mt-6 grid flex-1 grid-cols-2 content-start gap-x-3 gap-y-2.5">
+                {program.features.map((feature) => (
+                  <li key={feature} className="flex items-center gap-2 text-sm font-medium">
+                    <span className="flex h-5 w-5 shrink-0 items-center justify-center rounded-full bg-sprout/30 text-shonar">
+                      <Check size={12} strokeWidth={3} />
+                    </span>
+                    {feature}
+                  </li>
+                ))}
+              </ul>
+
+              <div className="mt-7 flex items-center justify-between gap-3 border-t border-ink/10 pt-5">
+                <div className="text-sm font-semibold text-ink/65">
+                  <span className="flex items-center gap-1.5">
+                    <Clock size={15} className="text-shonar" />
+                    {program.duration}
+                  </span>
+                  <span className="mt-1 flex items-center gap-1.5 text-xs">
+                    <CalendarDays size={14} className="text-shonar" />
+                    {program.schedule}
+                  </span>
                 </div>
-
-                <h3 className="text-2xl mb-4 font-bold text-gray-900">{program.title}</h3>
-                <p className="text-gray-600 mb-6 leading-relaxed">{program.description}</p>
-
-                <div className="mb-6">
-                  <div className="flex items-center gap-2 text-sm text-gray-500 mb-4">
-                    <span className="bg-gray-100 px-3 py-1 rounded-full font-medium">{program.duration}</span>
-                  </div>
-
-                  <div className="space-y-2">
-                    {program.features.map((feature, idx) => (
-                      <div key={idx} className="flex items-center gap-2 text-sm text-gray-700">
-                        <CheckCircle size={16} className="text-green-500" />
-                        <span>{feature}</span>
-                      </div>
-                    ))}
-                  </div>
-                </div>
-
-                <a href="#contact" className={`w-full bg-gradient-to-r ${program.color} text-white py-3 rounded-xl font-semibold hover:shadow-lg transition-all block text-center`}>
-                  Enroll Now
+                <a href="#contact" className="brand-button-green px-5 py-2.5 text-sm">
+                  Enroll
+                  <ArrowRight size={15} />
                 </a>
               </div>
             </motion.div>
@@ -116,18 +117,26 @@ export function AssetProgram() {
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
           transition={{ duration: 0.6 }}
-          className="text-center flex flex-col sm:flex-row gap-4 justify-center"
+          className="mt-12 flex flex-col items-center justify-between gap-5 rounded-3xl bg-ink/30 p-6 ring-1 ring-white/10 md:flex-row md:p-8"
         >
-          <a
-            href="#contact"
-            className="bg-gradient-to-r from-green-600 to-emerald-600 text-white px-10 py-4 rounded-full font-semibold hover:shadow-xl hover:scale-105 transition-all"
-          >
-            Enroll Now
-          </a>
-          <a href="/sombhabona_courses.pdf" target="_blank" rel="noreferrer" className="bg-white text-green-600 border-2 border-green-600 px-10 py-4 rounded-full font-semibold hover:bg-green-50 transition-all flex items-center justify-center gap-2">
-            <Download size={20} />
-            Download Brochure
-          </a>
+          <p className="text-center text-lg font-semibold md:text-left">
+            Seats are limited for each NSDA batch. Reserve yours today.
+          </p>
+          <div className="flex flex-col gap-3 sm:flex-row">
+            <a href="#contact" className="brand-button-primary px-7">
+              Enroll Now
+              <ArrowRight size={18} />
+            </a>
+            <a
+              href="/sombhabona_courses.pdf"
+              target="_blank"
+              rel="noreferrer"
+              className="inline-flex items-center justify-center gap-2 rounded-full border-2 border-white/30 px-7 py-3 font-semibold text-white transition-colors hover:border-white hover:bg-white/10"
+            >
+              <Download size={18} />
+              Download Brochure
+            </a>
+          </div>
         </motion.div>
       </div>
     </section>

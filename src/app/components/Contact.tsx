@@ -1,4 +1,4 @@
-import { MapPin, Phone, Clock, Mail, Send } from 'lucide-react';
+import { MapPin, Phone, Clock, Mail, Send, CheckCircle2 } from 'lucide-react';
 import { useState } from 'react';
 import { motion } from 'motion/react';
 
@@ -10,7 +10,7 @@ export function Contact() {
     course: '',
     message: '',
   });
-  
+
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
   const [success, setSuccess] = useState(false);
@@ -71,23 +71,17 @@ export function Contact() {
     setError('');
   };
 
-  return (
-    <section className="section-pad relative overflow-hidden" id="contact">
-      <div className="absolute inset-0 bg-[radial-gradient(circle_at_top_left,rgba(23,50,74,0.12),transparent_30%),linear-gradient(180deg,rgba(255,255,255,0.45),rgba(248,243,234,0.65))]" />
-      <div className="section-shell relative z-10">
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          transition={{ duration: 0.6 }}
-          className="text-center mb-16"
-        >
-          <p className="section-lede">
-            Ready to start? Visit us or call our helpline today.
-          </p>
-        </motion.div>
+  const infoItems = [
+    { icon: MapPin, title: 'Address', lines: ['756 West Sewrapara, Mirpur, Dhaka'] },
+    { icon: Phone, title: 'Phone', lines: ['01835350647'], href: 'tel:01835350647' },
+    { icon: Clock, title: 'Office Hours', lines: ['Saturday to Thursday', '9 AM to 6 PM'] },
+    { icon: Mail, title: 'Email', lines: ['info@sombhabona.com'], href: 'mailto:info@sombhabona.com' },
+  ];
 
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-12">
+  return (
+    <section className="section-pad relative bg-mint" id="contact">
+      <div className="section-shell relative z-10">
+        <div className="grid grid-cols-1 gap-10 lg:grid-cols-[0.9fr_1.1fr] lg:gap-14">
           {/* Visit Our Hub Section */}
           <motion.div
             initial={{ opacity: 0, x: -30 }}
@@ -95,67 +89,36 @@ export function Contact() {
             viewport={{ once: true }}
             transition={{ duration: 0.6 }}
           >
-            <h3 className="text-3xl mb-8 text-slate-900">
-              Visit Our Hub
-            </h3>
+            <span className="section-eyebrow mb-5 bg-white">Get in touch</span>
+            <h2 className="section-title">
+              Ready to <span className="highlight">start</span>?
+            </h2>
+            <p className="mt-4 max-w-md text-lg leading-8 text-ink/70">
+              Visit our hub, call the helpline, or share your details and our admission team will reach out.
+            </p>
 
-            <div className="space-y-6">
-              <motion.div
-                whileHover={{ x: 5 }}
-                className="surface-card-soft flex items-start gap-4 p-6"
-              >
-                <div className="bg-slate-900 p-3 rounded-xl flex-shrink-0 text-white">
-                  <MapPin className="text-white" size={24} />
-                </div>
-                <div>
-                  <h4 className="font-semibold mb-2 text-lg">Address</h4>
-                  <p className="text-gray-600">756 West Sewrapara, Mirpur, Dhaka</p>
-                </div>
-              </motion.div>
-
-              <motion.div
-                whileHover={{ x: 5 }}
-                className="surface-card-soft flex items-start gap-4 p-6"
-              >
-                <div className="bg-emerald-600 p-3 rounded-xl flex-shrink-0">
-                  <Phone className="text-white" size={24} />
-                </div>
-                <div>
-                  <h4 className="font-semibold mb-2 text-lg">Phone</h4>
-                  <a href="tel:01835350647" className="text-green-600 hover:underline text-lg">
-                    01835350647
-                  </a>
-                </div>
-              </motion.div>
-
-              <motion.div
-                whileHover={{ x: 5 }}
-                className="surface-card-soft flex items-start gap-4 p-6"
-              >
-                <div className="bg-amber-600 p-3 rounded-xl flex-shrink-0">
-                  <Clock className="text-white" size={24} />
-                </div>
-                <div>
-                  <h4 className="font-semibold mb-2 text-lg">Office Hours</h4>
-                  <p className="text-gray-600">Saturday to Thursday</p>
-                  <p className="text-gray-600">Time: 9 AM to 6 PM</p>
-                </div>
-              </motion.div>
-
-              <motion.div
-                whileHover={{ x: 5 }}
-                className="surface-card-soft flex items-start gap-4 p-6"
-              >
-                <div className="bg-rose-600 p-3 rounded-xl flex-shrink-0">
-                  <Mail className="text-white" size={24} />
-                </div>
-                <div>
-                  <h4 className="font-semibold mb-2 text-lg">Email</h4>
-                  <a href="mailto:info@sombhabona.com" className="text-pink-600 hover:underline text-lg">
-                    info@sombhabona.com
-                  </a>
-                </div>
-              </motion.div>
+            <div className="mt-8 grid gap-3 sm:grid-cols-2 lg:grid-cols-1">
+              {infoItems.map((item) => {
+                const body = (
+                  <>
+                    <div className="icon-tile bg-shonar text-white">
+                      <item.icon size={22} />
+                    </div>
+                    <div>
+                      <h3 className="text-xs font-bold uppercase tracking-[0.16em] text-ink/50">{item.title}</h3>
+                      {item.lines.map((line) => (
+                        <p key={line} className={`mt-0.5 font-semibold ${item.href ? 'text-shonar' : 'text-ink'}`}>{line}</p>
+                      ))}
+                    </div>
+                  </>
+                );
+                const cls = 'flex items-center gap-4 rounded-2xl bg-white p-4 ring-1 ring-ink/8 transition-all hover:ring-shonar/40';
+                return item.href ? (
+                  <a key={item.title} href={item.href} className={`${cls} hover:-translate-y-0.5`}>{body}</a>
+                ) : (
+                  <div key={item.title} className={cls}>{body}</div>
+                );
+              })}
             </div>
           </motion.div>
 
@@ -166,120 +129,134 @@ export function Contact() {
             viewport={{ once: true }}
             transition={{ duration: 0.6 }}
           >
-            <form onSubmit={handleSubmit} className="surface-card p-8">
-              <div className="mb-6">
-                <div className="mb-3 text-sm font-semibold uppercase tracking-[0.18em] text-slate-500">
-                  For Admission Share Your Information
+            <form onSubmit={handleSubmit} className="surface-card relative overflow-hidden p-6 md:p-9">
+              <div className="absolute inset-x-0 top-0 h-1.5 bg-[linear-gradient(90deg,var(--brand-green)_0_70%,var(--brand-lime)_70%_88%,var(--brand-yellow)_88%)]" />
+              <h3 className="text-2xl font-semibold text-ink">Admission form</h3>
+              <p className="mt-1 text-sm text-ink/60">Share your information and we will call you back.</p>
+
+              <div className="mt-7 grid gap-5 sm:grid-cols-2">
+                <div className="sm:col-span-2">
+                  <label htmlFor="fullName" className="mb-2 block text-sm font-semibold text-ink/80">
+                    Full Name
+                  </label>
+                  <input
+                    type="text"
+                    id="fullName"
+                    name="fullName"
+                    value={formData.fullName}
+                    onChange={handleChange}
+                    placeholder="Enter your name"
+                    autoComplete="name"
+                    required
+                    className="form-field"
+                  />
                 </div>
-                <label htmlFor="fullName" className="block mb-3 font-semibold text-gray-700">
-                  Full Name
-                </label>
-                <input
-                  type="text"
-                  id="fullName"
-                  name="fullName"
-                  value={formData.fullName}
-                  onChange={handleChange}
-                  placeholder="Enter your name"
-                  required
-                  className="w-full px-5 py-4 border border-slate-200 rounded-xl bg-white/90 focus:outline-none focus:ring-2 focus:ring-slate-900/20 focus:border-transparent transition-all"
-                />
-              </div>
 
-              <div className="mb-6">
-                <label htmlFor="email" className="block mb-3 font-semibold text-gray-700">
-                  Email Address
-                </label>
-                <input
-                  type="email"
-                  id="email"
-                  name="email"
-                  value={formData.email}
-                  onChange={handleChange}
-                  placeholder="Enter your email"
-                  required
-                  className="w-full px-5 py-4 border border-slate-200 rounded-xl bg-white/90 focus:outline-none focus:ring-2 focus:ring-slate-900/20 focus:border-transparent transition-all"
-                />
-              </div>
+                <div>
+                  <label htmlFor="email" className="mb-2 block text-sm font-semibold text-ink/80">
+                    Email Address
+                  </label>
+                  <input
+                    type="email"
+                    id="email"
+                    name="email"
+                    value={formData.email}
+                    onChange={handleChange}
+                    placeholder="you@example.com"
+                    autoComplete="email"
+                    required
+                    className="form-field"
+                  />
+                </div>
 
-              <div className="mb-6">
-                <label htmlFor="phone" className="block mb-3 font-semibold text-gray-700">
-                  Phone Number
-                </label>
-                <input
-                  type="tel"
-                  id="phone"
-                  name="phone"
-                  value={formData.phone}
-                  onChange={handleChange}
-                  placeholder="Enter your phone"
-                  required
-                  className="w-full px-5 py-4 border border-slate-200 rounded-xl bg-white/90 focus:outline-none focus:ring-2 focus:ring-slate-900/20 focus:border-transparent transition-all"
-                />
-              </div>
+                <div>
+                  <label htmlFor="phone" className="mb-2 block text-sm font-semibold text-ink/80">
+                    Phone Number
+                  </label>
+                  <input
+                    type="tel"
+                    id="phone"
+                    name="phone"
+                    value={formData.phone}
+                    onChange={handleChange}
+                    placeholder="01XXXXXXXXX"
+                    autoComplete="tel"
+                    required
+                    className="form-field"
+                  />
+                </div>
 
-              <div className="mb-6">
-                <label htmlFor="course" className="block mb-3 font-semibold text-gray-700">
-                  Interested Course
-                </label>
-                <select
-                  id="course"
-                  name="course"
-                  value={formData.course}
-                  onChange={handleChange}
-                  required
-                  className="w-full px-5 py-4 border border-slate-200 rounded-xl bg-white/90 focus:outline-none focus:ring-2 focus:ring-slate-900/20 focus:border-transparent transition-all"
-                >
-                  <option value="">Select a path</option>
-                  <option value="spoken-english-beginner">Spoken English - Beginner</option>
-                  <option value="spoken-english-intermediate">Spoken English - Intermediate</option>
-                  <option value="spoken-english-advanced">Spoken English - Advanced</option>
-                  <option value="spoken-english-full">Spoken English - Full Programme</option>
-                  <option value="graphic-design">Graphic Design & Freelancing</option>
-                  <option value="digital-marketing">Digital Marketing & Freelancing</option>
-                  <option value="it-support">IT Support</option>
-                  <option value="basic-computer">Basic Computer Operation</option>
-                  <option value="linux">Linux Operation for Beginner</option>
-                  <option value="rhcsa-rhce">RHCSA & RHCE Exam Preparation</option>
-                  <option value="devops-docker">DevOps & Docker</option>
-                  <option value="aws-cloud">AWS Cloud for Beginner</option>
-                  <option value="digital-marketing-level3">Digital Marketing - Level 3 (NSDA)</option>
-                  <option value="graphic-design-level3">Graphics Design - Level 3 (NSDA)</option>
-                  <option value="it-support-level3">IT Support - Level 3 (NSDA)</option>
-                </select>
-              </div>
+                <div className="sm:col-span-2">
+                  <label htmlFor="course" className="mb-2 block text-sm font-semibold text-ink/80">
+                    Interested Course
+                  </label>
+                  <select
+                    id="course"
+                    name="course"
+                    value={formData.course}
+                    onChange={handleChange}
+                    required
+                    className="form-field"
+                  >
+                    <option value="">Select a path</option>
+                    <optgroup label="IT Foundation">
+                      <option value="graphic-design">Graphic Design & Freelancing</option>
+                      <option value="digital-marketing">Digital Marketing & Freelancing</option>
+                      <option value="ai-office">AI Integrated Office Course</option>
+                      <option value="basic-computer">Basic Computer Operation with IT Support</option>
+                    </optgroup>
+                    <optgroup label="Advanced & Certification">
+                      <option value="linux">Beginner Linux</option>
+                      <option value="rhcsa-rhce">RHCSA & RHCE Exam Preparation</option>
+                      <option value="devops-docker">DevOps & Docker</option>
+                      <option value="aws-cloud">AWS Cloud for Beginner</option>
+                    </optgroup>
+                    <optgroup label="Spoken English">
+                      <option value="spoken-english-beginner">Spoken English - Beginner</option>
+                      <option value="spoken-english-intermediate">Spoken English - Intermediate</option>
+                      <option value="spoken-english-advanced">Spoken English - Advanced</option>
+                      <option value="spoken-english-full">Spoken English - Full Programme</option>
+                    </optgroup>
+                    <optgroup label="NSDA Asset Program">
+                      <option value="digital-marketing-level3">Digital Marketing - Level 3 (NSDA)</option>
+                      <option value="graphic-design-level3">Graphics Design - Level 3 (NSDA)</option>
+                      <option value="it-support-level3">IT Support - Level 3 (NSDA)</option>
+                    </optgroup>
+                  </select>
+                </div>
 
-              <div className="mb-6">
-                <label htmlFor="message" className="block mb-3 font-semibold text-gray-700">
-                  Message (Optional)
-                </label>
-                <textarea
-                  id="message"
-                  name="message"
-                  value={formData.message}
-                  onChange={handleChange}
-                  placeholder="Tell us more about your interest"
-                  rows={4}
-                  className="w-full px-5 py-4 border border-slate-200 rounded-xl bg-white/90 focus:outline-none focus:ring-2 focus:ring-slate-900/20 focus:border-transparent transition-all resize-none"
-                />
+                <div className="sm:col-span-2">
+                  <label htmlFor="message" className="mb-2 block text-sm font-semibold text-ink/80">
+                    Message <span className="font-normal text-ink/45">(optional)</span>
+                  </label>
+                  <textarea
+                    id="message"
+                    name="message"
+                    value={formData.message}
+                    onChange={handleChange}
+                    placeholder="Tell us more about your interest"
+                    rows={4}
+                    className="form-field resize-none"
+                  />
+                </div>
               </div>
 
               <motion.button
                 type="submit"
                 disabled={loading}
-                whileHover={{ scale: 1.02 }}
                 whileTap={{ scale: 0.98 }}
-                className="w-full bg-slate-900 text-white py-4 rounded-xl font-semibold hover:shadow-xl transition-all flex items-center justify-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed"
+                className="brand-button-primary mt-7 w-full py-4 text-base disabled:cursor-not-allowed disabled:opacity-60 disabled:hover:translate-y-0"
               >
-                <Send size={20} />
-                {loading ? 'Submitting...' : 'Enroll Now'}
+                <Send size={19} />
+                {loading ? 'Submitting...' : 'Submit Admission Request'}
               </motion.button>
 
               {error && (
                 <motion.div
+                  role="alert"
                   initial={{ opacity: 0, y: -10 }}
                   animate={{ opacity: 1, y: 0 }}
-                  className="mt-4 p-4 bg-red-50 border border-red-200 rounded-lg text-red-700 text-sm"
+                  className="mt-4 rounded-xl border border-red-200 bg-red-50 p-4 text-sm text-red-700"
                 >
                   {error}
                 </motion.div>
@@ -287,11 +264,13 @@ export function Contact() {
 
               {success && (
                 <motion.div
+                  role="status"
                   initial={{ opacity: 0, y: -10 }}
                   animate={{ opacity: 1, y: 0 }}
-                  className="mt-4 p-4 bg-green-50 border border-green-200 rounded-lg text-green-700 text-sm"
+                  className="mt-4 flex items-center gap-2 rounded-xl bg-mint p-4 text-sm font-semibold text-shonar ring-1 ring-shonar/20"
                 >
-                  ✓ Thank you for your interest! We will contact you soon.
+                  <CheckCircle2 size={18} />
+                  Thank you for your interest! We will contact you soon.
                 </motion.div>
               )}
             </form>

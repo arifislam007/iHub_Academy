@@ -59,12 +59,12 @@ export function Admin() {
   };
 
   return (
-    <section className="min-h-screen bg-[linear-gradient(180deg,rgba(248,243,234,0.95),rgba(255,255,255,1))] px-4 py-8">
+    <section className="min-h-screen bg-cream px-4 py-8">
       <div className="section-shell">
         <div className="mb-6 flex flex-wrap items-center justify-between gap-4">
           <div>
-            <p className="text-sm font-semibold uppercase tracking-[0.22em] text-slate-500">Admin Panel</p>
-            <h1 className="mt-2 text-3xl font-bold text-slate-900">Saved Contacts</h1>
+            <p className="text-sm font-semibold uppercase tracking-[0.22em] text-shonar">Admin Panel</p>
+            <h1 className="mt-2 text-3xl font-bold text-ink">Saved Contacts</h1>
           </div>
           <a href="#home" className="brand-button-secondary">
             Back to site
@@ -98,7 +98,7 @@ export function Admin() {
 
           <div className="max-h-[70vh] overflow-auto rounded-md border border-slate-200">
             <table className="w-full table-fixed text-sm">
-              <thead className="bg-slate-50">
+              <thead className="sticky top-0 bg-mint text-ink">
                 <tr>
                   <th className="w-16 p-2 text-left">ID</th>
                   <th className="p-2 text-left">Name</th>

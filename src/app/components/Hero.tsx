@@ -1,10 +1,11 @@
-import { Download, Phone, Sparkles, ArrowRight, CheckCircle2, GraduationCap, Users, Clock3 } from 'lucide-react';
+import { Download, Phone, ArrowRight, CheckCircle2, Users, Clock3, Sprout, BadgeCheck } from 'lucide-react';
 import { motion } from 'motion/react';
 
 export function Hero() {
   const highlights = [
     'Hands-on classroom practice',
     'Career and freelancing support',
+    'NSDA certified programs',
   ];
 
   const stats = [
@@ -14,23 +15,22 @@ export function Hero() {
   ];
 
   return (
-    <section id="home" className="relative overflow-hidden pt-10 pb-20 md:pt-16 md:pb-28">
-      <div className="absolute inset-0 pointer-events-none">
-        <div className="absolute inset-x-0 top-0 h-[38rem] bg-[radial-gradient(circle_at_top,rgba(23,50,74,0.2),transparent_60%),linear-gradient(180deg,rgba(255,255,255,0.9),rgba(246,241,233,0.2))]" />
-        <motion.div
-          className="absolute left-10 top-12 h-72 w-72 rounded-full bg-emerald-300/25 blur-3xl"
-          animate={{ scale: [1, 1.12, 1], opacity: [0.4, 0.65, 0.4] }}
-          transition={{ duration: 10, repeat: Infinity }}
-        />
-        <motion.div
-          className="absolute bottom-0 right-0 h-[28rem] w-[28rem] rounded-full bg-cyan-300/20 blur-3xl"
-          animate={{ scale: [1.05, 0.95, 1.05], opacity: [0.3, 0.5, 0.3] }}
-          transition={{ duration: 12, repeat: Infinity }}
+    <section id="home" className="relative overflow-hidden pt-8 pb-20 md:pt-14 md:pb-28">
+      <div className="pointer-events-none absolute inset-0">
+        <div className="absolute -left-32 -top-32 h-[30rem] w-[30rem] rounded-full bg-mint blur-3xl" />
+        <div className="absolute -right-24 top-40 h-80 w-80 rounded-full bg-sunrise/15 blur-3xl" />
+        <div
+          className="absolute inset-0 opacity-[0.35]"
+          style={{
+            backgroundImage: 'radial-gradient(rgba(14,42,34,0.12) 1px, transparent 1px)',
+            backgroundSize: '26px 26px',
+            maskImage: 'linear-gradient(180deg, black, transparent 75%)',
+          }}
         />
       </div>
 
       <div className="section-shell relative z-10">
-        <div className="grid items-center gap-10 lg:grid-cols-[1.1fr_0.9fr]">
+        <div className="grid items-center gap-12 lg:grid-cols-[1.1fr_0.9fr]">
           <div>
             <motion.div
               initial={{ opacity: 0, y: 20 }}
@@ -38,7 +38,10 @@ export function Hero() {
               transition={{ duration: 0.6 }}
               className="section-eyebrow mb-6 w-fit"
             >
-              <Sparkles size={14} className="text-emerald-700" />
+              <span className="relative flex h-2 w-2">
+                <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-sprout opacity-75" />
+                <span className="relative inline-flex h-2 w-2 rounded-full bg-shonar" />
+              </span>
               Admissions open for the next intake
             </motion.div>
 
@@ -46,18 +49,18 @@ export function Hero() {
               initial={{ opacity: 0, y: 24 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.6, delay: 0.1 }}
-              className="section-title max-w-4xl"
+              className="section-title max-w-3xl"
             >
-              Practical training, turns into a career.
+              Practical training that grows into a <span className="highlight">career</span>.
             </motion.h1>
 
             <motion.p
               initial={{ opacity: 0, y: 24 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.6, delay: 0.2 }}
-              className="section-lede mt-6 max-w-2xl text-left mx-0"
+              className="mt-6 max-w-xl text-lg leading-8 text-ink/70 md:text-xl"
             >
-                Sombhabona iHub helps students, job seekers, and aspiring freelancers
+              Sombhabona iHub helps students, job seekers, and aspiring freelancers
               build real-world confidence through spoken English, IT, and industry-ready programs.
             </motion.p>
 
@@ -65,35 +68,31 @@ export function Hero() {
               initial={{ opacity: 0, y: 24 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.6, delay: 0.3 }}
-              className="mt-8 flex flex-col gap-4 sm:flex-row"
+              className="mt-8 flex flex-col gap-3 sm:flex-row sm:flex-wrap"
             >
-              <a href="#contact" className="brand-button-primary">
+              <a href="#contact" className="brand-button-primary px-7 py-3.5">
                 Enroll Now
                 <ArrowRight size={18} />
               </a>
-              <a href="/sombhabona_courses.pdf" target="_blank" rel="noreferrer" className="brand-button-secondary">
+              <a href="/sombhabona_courses.pdf" target="_blank" rel="noreferrer" className="brand-button-secondary px-7 py-3.5">
                 <Download size={18} />
                 Download Brochure
               </a>
-              <a href="tel:01835350647" className="brand-button-secondary">
-                <Phone size={18} />
-                01835350647
-              </a>
             </motion.div>
 
-            <motion.div
+            <motion.ul
               initial={{ opacity: 0, y: 24 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.6, delay: 0.4 }}
-              className="mt-8 flex flex-wrap gap-3"
+              className="mt-8 flex flex-wrap gap-x-6 gap-y-3"
             >
               {highlights.map((item) => (
-                <span key={item} className="surface-card-soft inline-flex items-center gap-2 whitespace-nowrap px-4 py-3 text-sm font-semibold text-slate-700">
-                  <CheckCircle2 size={16} className="text-emerald-700" />
+                <li key={item} className="inline-flex items-center gap-2 text-sm font-semibold text-ink/75">
+                  <CheckCircle2 size={18} className="text-shonar" />
                   {item}
-                </span>
+                </li>
               ))}
-            </motion.div>
+            </motion.ul>
           </div>
 
           <motion.div
@@ -102,48 +101,73 @@ export function Hero() {
             transition={{ duration: 0.7, delay: 0.25 }}
             className="relative"
           >
-            <div className="surface-card relative overflow-hidden p-6 md:p-8">
-              <div className="absolute right-0 top-0 h-36 w-36 rounded-bl-[3rem] bg-gradient-to-br from-emerald-200 to-cyan-200 opacity-80" />
-              <div className="relative z-10 space-y-6">
-                <div className="flex items-center gap-3">
-                  <div className="flex h-14 w-14 items-center justify-center rounded-2xl bg-slate-900 text-white shadow-lg">
-                    <GraduationCap size={26} />
-                  </div>
-                  <div>
-                    <p className="text-sm font-semibold uppercase tracking-[0.22em] text-slate-500">New Batch</p>
-                    <p className="text-xl font-bold text-slate-900">Hands-on learning, not passive lectures</p>
-                  </div>
-                </div>
+            {/* Main green card */}
+            <div className="relative overflow-hidden rounded-[2rem] bg-shonar p-6 text-white shadow-[0_40px_80px_-40px_rgba(11,110,79,0.9)] md:p-8">
+              <div className="absolute -right-16 -top-16 h-56 w-56 rounded-full bg-sprout/25" />
+              <div className="absolute -bottom-20 -left-10 h-48 w-48 rounded-full bg-white/5" />
 
-                <div className="grid gap-4 sm:grid-cols-2">
-                  <div className="rounded-3xl bg-slate-950 p-5 text-white">
-                    <div className="flex items-center gap-2 text-sm text-white/70">
+              <div className="relative z-10">
+                <div className="flex items-center justify-between">
+                  <span className="pill bg-sunrise text-ink">New Batch</span>
+                  <Sprout className="text-sprout" size={28} />
+                </div>
+                <p className="mt-5 font-[family-name:var(--font-display)] text-2xl font-semibold leading-snug md:text-3xl">
+                  Hands-on learning, not passive lectures.
+                </p>
+
+                <div className="mt-6 grid gap-3 sm:grid-cols-2">
+                  <div className="rounded-2xl bg-white/10 p-5 ring-1 ring-white/15">
+                    <div className="flex items-center gap-2 text-sm text-white/75">
                       <Users size={16} />
                       Small batch mentoring
                     </div>
-                    <p className="mt-3 text-3xl font-bold">1:15</p>
-                    <p className="mt-2 text-sm text-white/70">Focused teacher support in every class.</p>
+                    <p className="mt-2 text-3xl font-extrabold text-sunrise">1:15</p>
+                    <p className="mt-1 text-sm text-white/70">Focused teacher support in every class.</p>
                   </div>
-                  <div className="rounded-3xl border border-slate-200 bg-white p-5">
-                    <div className="flex items-center gap-2 text-sm text-slate-500">
+                  <div className="rounded-2xl bg-cream p-5 text-ink">
+                    <div className="flex items-center gap-2 text-sm text-ink/60">
                       <Clock3 size={16} />
                       Class rhythm
                     </div>
-                    <p className="mt-3 text-3xl font-bold text-slate-900">Weekend friendly</p>
-                    <p className="mt-2 text-sm text-slate-600">Designed for students, job holders, and freelancers.</p>
+                    <p className="mt-2 text-2xl font-extrabold">Weekend friendly</p>
+                    <p className="mt-1 text-sm text-ink/65">For students, job holders & freelancers.</p>
                   </div>
                 </div>
 
-                <div className="grid grid-cols-3 gap-3">
+                <div className="mt-3 grid grid-cols-3 divide-x divide-white/15 rounded-2xl bg-ink/30 py-4">
                   {stats.map((stat) => (
-                    <div key={stat.label} className="rounded-2xl border border-slate-200 bg-white/90 p-4 text-center">
-                      <p className="text-2xl font-bold text-slate-900">{stat.number}</p>
-                      <p className="mt-1 text-xs font-semibold uppercase tracking-[0.18em] text-slate-500">{stat.label}</p>
+                    <div key={stat.label} className="px-2 text-center">
+                      <p className="text-2xl font-extrabold">{stat.number}</p>
+                      <p className="mt-1 text-[0.68rem] font-semibold uppercase leading-tight tracking-[0.12em] text-white/65">{stat.label}</p>
                     </div>
                   ))}
                 </div>
               </div>
             </div>
+
+            {/* Floating badge */}
+            <motion.div
+              initial={{ opacity: 0, scale: 0.9 }}
+              animate={{ opacity: 1, scale: 1 }}
+              transition={{ duration: 0.5, delay: 0.7 }}
+              className="surface-card absolute -bottom-6 -left-4 hidden items-center gap-3 px-4 py-3 sm:flex"
+            >
+              <div className="icon-tile h-10 w-10 bg-sunrise text-ink">
+                <BadgeCheck size={20} />
+              </div>
+              <div>
+                <p className="text-sm font-bold text-ink">NSDA Partner</p>
+                <p className="text-xs text-ink/60">Govt. certified programs</p>
+              </div>
+            </motion.div>
+
+            <a
+              href="tel:01835350647"
+              className="surface-card absolute -right-3 -top-5 hidden items-center gap-2 px-4 py-2.5 text-sm font-bold text-ink transition-colors hover:text-shonar md:flex"
+            >
+              <Phone size={16} className="text-shonar" />
+              01835350647
+            </a>
           </motion.div>
         </div>
       </div>

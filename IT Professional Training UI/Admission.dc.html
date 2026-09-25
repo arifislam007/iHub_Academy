@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet data-dc-atomics>
+<style>
+  body{margin:0;background:#f7f8fa}
+  a{color:oklch(52% 0.15 145);text-decoration:none}
+  a:hover{color:oklch(40% 0.15 145)}
+  input::placeholder, textarea::placeholder{color:oklch(65% 0.01 255)}
+</style>
+</helmet>
+
+<div style="font-family:'Helvetica Neue',Helvetica,Arial,sans-serif;color:oklch(22% 0.02 255);background:oklch(98% 0.004 255);min-height:100vh" data-screen-label="Admission">
+
+  <header style="background:#fff;border-bottom:1px solid oklch(90% 0.01 255);display:flex;align-items:center;justify-content:space-between;padding:16px 56px">
+    <a href="Landing.dc.html" style="display:flex;align-items:center;gap:10px">
+      <div style="width:38px;height:38px;border-radius:8px;background:oklch(52% 0.15 145);display:flex;align-items:center;justify-content:center;color:#fff;font-weight:700;font-size:17px">S</div>
+      <div style="font-size:19px;font-weight:700;letter-spacing:-0.01em;color:oklch(22% 0.02 255)">Sombhabona iHub</div>
+    </a>
+    <a href="Landing.dc.html" style="font-size:14.5px;font-weight:600;color:oklch(30% 0.02 255)">← Back to site</a>
+  </header>
+
+  <section style="max-width:1120px;margin:0 auto;padding:72px 56px 100px;display:grid;grid-template-columns:1fr 1.1fr;gap:56px;align-items:start">
+
+    <!-- INFO SIDE -->
+    <div>
+      <div style="display:inline-block;background:oklch(52% 0.15 145 / 0.08);color:oklch(45% 0.15 145);padding:6px 14px;border-radius:20px;font-size:13px;font-weight:600;margin-bottom:20px">Admission Open</div>
+      <h1 style="font-size:38px;font-weight:800;letter-spacing:-0.02em;line-height:1.15;margin:0 0 16px">For Admission, Share Your Information</h1>
+      <p style="font-size:15.5px;line-height:1.6;color:oklch(45% 0.02 255);margin:0 0 40px">Fill out the form and our team will reach out within 24 hours to guide you through course selection and enrollment.</p>
+
+      <div style="display:flex;flex-direction:column;gap:20px">
+        <div style="background:#fff;border:1px solid oklch(90% 0.01 255);border-radius:14px;padding:20px 22px">
+          <div style="font-size:12px;font-weight:700;color:oklch(52% 0.15 145);margin-bottom:6px">ADDRESS</div>
+          <div style="font-size:14.5px">756 (4th Floor), West Shewrapara, Mirpur, Metro Pillar No. 304, Dhaka</div>
+        </div>
+        <div style="background:#fff;border:1px solid oklch(90% 0.01 255);border-radius:14px;padding:20px 22px">
+          <div style="font-size:12px;font-weight:700;color:oklch(52% 0.15 145);margin-bottom:6px">PHONE</div>
+          <div style="font-size:14.5px">01835 350647 / 01737 243447</div>
+        </div>
+        <div style="background:#fff;border:1px solid oklch(90% 0.01 255);border-radius:14px;padding:20px 22px">
+          <div style="font-size:12px;font-weight:700;color:oklch(52% 0.15 145);margin-bottom:6px">OFFICE HOURS</div>
+          <div style="font-size:14.5px">Saturday to Thursday · 9 AM – 6 PM</div>
+        </div>
+        <div style="background:#fff;border:1px solid oklch(90% 0.01 255);border-radius:14px;padding:20px 22px">
+          <div style="font-size:12px;font-weight:700;color:oklch(52% 0.15 145);margin-bottom:6px">EMAIL</div>
+          <div style="font-size:14.5px">sombhabona@gmail.com</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- FORM SIDE -->
+    <div style="background:#fff;border:1px solid oklch(90% 0.01 255);border-radius:20px;padding:40px;box-shadow:0 12px 32px oklch(0% 0 0 / 0.05)">
+      <sc-if value="{{ submitted }}" hint-placeholder-val="{{ false }}">
+        <div style="text-align:center;padding:40px 10px">
+          <div style="width:56px;height:56px;border-radius:50%;background:oklch(70% 0.17 145 / 0.15);color:oklch(45% 0.15 145);display:flex;align-items:center;justify-content:center;font-size:26px;font-weight:800;margin:0 auto 20px">✓</div>
+          <div style="font-size:20px;font-weight:700;margin-bottom:8px">Thanks, {{ form.name }}!</div>
+          <div style="font-size:14.5px;color:oklch(45% 0.02 255);line-height:1.6">We've received your information and will contact you shortly at {{ form.phone }}.</div>
+        </div>
+      </sc-if>
+      <sc-if value="{{ notSubmitted }}" hint-placeholder-val="{{ true }}">
+        <form onSubmit="{{ handleSubmit }}" style="display:flex;flex-direction:column;gap:20px">
+          <div>
+            <label style="display:block;font-size:13px;font-weight:600;margin-bottom:7px">Full Name</label>
+            <input value="{{ form.name }}" onChange="{{ setName }}" type="text" placeholder="Enter your name" style="width:100%;box-sizing:border-box;padding:12px 14px;border:1px solid oklch(88% 0.01 255);border-radius:8px;font-size:14.5px;font-family:inherit"/>
+          </div>
+          <div>
+            <label style="display:block;font-size:13px;font-weight:600;margin-bottom:7px">Email Address</label>
+            <input value="{{ form.email }}" onChange="{{ setEmail }}" type="email" placeholder="Enter your email" style="width:100%;box-sizing:border-box;padding:12px 14px;border:1px solid oklch(88% 0.01 255);border-radius:8px;font-size:14.5px;font-family:inherit"/>
+          </div>
+          <div>
+            <label style="display:block;font-size:13px;font-weight:600;margin-bottom:7px">Phone Number</label>
+            <input value="{{ form.phone }}" onChange="{{ setPhone }}" type="tel" placeholder="Enter your phone" style="width:100%;box-sizing:border-box;padding:12px 14px;border:1px solid oklch(88% 0.01 255);border-radius:8px;font-size:14.5px;font-family:inherit"/>
+          </div>
+          <div>
+            <label style="display:block;font-size:13px;font-weight:600;margin-bottom:7px">Interested Course</label>
+            <select value="{{ form.course }}" onChange="{{ setCourse }}" style="width:100%;box-sizing:border-box;padding:12px 14px;border:1px solid oklch(88% 0.01 255);border-radius:8px;font-size:14.5px;font-family:inherit;background:#fff;color:oklch(22% 0.02 255)">
+              <option value="">Select a path</option>
+              <option value="spoken-english">Spoken English Course</option>
+              <option value="graphic-design">Graphic Design & Freelancing</option>
+              <option value="digital-marketing">Digital Marketing & Freelancing</option>
+              <option value="it-support">IT Support</option>
+              <option value="basic-computer">Basic Computer Operation</option>
+              <option value="linux">Linux Operation for Beginner</option>
+              <option value="rhcsa">RHCSA & RHCE Exam Preparation</option>
+              <option value="devops">DevOps & Docker</option>
+              <option value="aws">AWS Cloud for Beginner</option>
+              <option value="asset-program">Asset Program (NSDA)</option>
+            </select>
+          </div>
+          <div>
+            <label style="display:block;font-size:13px;font-weight:600;margin-bottom:7px">Message (Optional)</label>
+            <textarea value="{{ form.message }}" onChange="{{ setMessage }}" placeholder="Tell us more about your interest" rows="3" style="width:100%;box-sizing:border-box;padding:12px 14px;border:1px solid oklch(88% 0.01 255);border-radius:8px;font-size:14.5px;font-family:inherit;resize:vertical"></textarea>
+          </div>
+          <button type="submit" style="background:oklch(52% 0.15 145);color:#fff;border:none;padding:14px;border-radius:9px;font-weight:700;font-size:15.5px;cursor:pointer;font-family:inherit">Enroll Now</button>
+        </form>
+      </sc-if>
+    </div>
+  </section>
+</div>
+
+</x-dc>
+<script type="text/x-dc" data-dc-script>
+class Component extends DCLogic {
+  state = {
+    submitted: false,
+    form: { name: '', email: '', phone: '', course: '', message: '' },
+  };
+  handleSubmit = (e) => {
+    e.preventDefault();
+    this.setState({ submitted: true });
+  };
+  setField(key, val) {
+    this.setState(s => ({ form: { ...s.form, [key]: val } }));
+  }
+  renderVals() {
+    return {
+      form: this.state.form,
+      submitted: this.state.submitted,
+      notSubmitted: !this.state.submitted,
+      handleSubmit: this.handleSubmit,
+      setName: (e) => this.setField('name', e.target.value),
+      setEmail: (e) => this.setField('email', e.target.value),
+      setPhone: (e) => this.setField('phone', e.target.value),
+      setCourse: (e) => this.setField('course', e.target.value),
+      setMessage: (e) => this.setField('message', e.target.value),
+    };
+  }
+}
+
+</script>
+</body>
+</html>
