@@ -41,7 +41,7 @@ export function Navigation() {
   }, [isMenuOpen]);
 
   return (
-    <nav className={`sticky top-0 z-50 transition-all duration-300 ${
+    <nav className={`fixed inset-x-0 top-0 z-50 transition-all duration-300 ${
       isScrolled || isMenuOpen ? 'border-b border-ink/10 bg-cream/90 shadow-[0_10px_30px_-18px_rgba(14,42,34,0.4)] backdrop-blur-xl' : 'bg-transparent'
     }`}>
       <div className="section-shell">

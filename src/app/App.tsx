@@ -29,7 +29,8 @@ export default function App() {
         ) : (
           <>
             <Navigation />
-            <main>
+            {/* pt-20 reserves space for the fixed h-20 navigation bar */}
+            <main className="pt-20">
               <Hero />
               <ITCourses />
               <SpokenEnglishCourse />
