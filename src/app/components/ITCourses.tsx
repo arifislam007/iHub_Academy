@@ -1,6 +1,15 @@
 import { Monitor, TrendingUp, Sparkles, Laptop, Terminal, Award, Container, Cloud, ArrowRight, Clock, MapPin, Flame, FileText, CalendarDays } from 'lucide-react';
 import { motion, AnimatePresence } from 'motion/react';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
+
+// The "Advanced Courses" menu link jumps to this section with the advanced tab open.
+// The hash covers direct links; the event covers repeat clicks, where the hash doesn't change.
+export const ADVANCED_COURSES_HASH = '#advanced-courses';
+const OPEN_ADVANCED_EVENT = 'it-courses:open-advanced';
+
+export function openAdvancedCourses() {
+  window.dispatchEvent(new Event(OPEN_ADVANCED_EVENT));
+}
 
 type Course = {
   title: string;
@@ -86,6 +95,20 @@ export function ITCourses() {
   const [active, setActive] = useState<(typeof tabs)[number]['id']>('foundation');
   const current = tabs.find((t) => t.id === active)!;
 
+  useEffect(() => {
+    const openAdvanced = () => setActive('advanced');
+    const onHash = () => {
+      if (window.location.hash === ADVANCED_COURSES_HASH) openAdvanced();
+    };
+    onHash();
+    window.addEventListener('hashchange', onHash);
+    window.addEventListener(OPEN_ADVANCED_EVENT, openAdvanced);
+    return () => {
+      window.removeEventListener('hashchange', onHash);
+      window.removeEventListener(OPEN_ADVANCED_EVENT, openAdvanced);
+    };
+  }, []);
+
   // WAI-ARIA tabs: arrow keys / Home / End move between tabs
   const onTabKeyDown = (e: React.KeyboardEvent<HTMLButtonElement>, index: number) => {
     let next = -1;
@@ -101,6 +124,8 @@ export function ITCourses() {
 
   return (
     <section className="section-pad relative bg-mint" id="it-courses">
+      {/* Scroll target for the "Advanced Courses" menu link */}
+      <span id="advanced-courses" aria-hidden="true" className="absolute top-0 scroll-mt-[5.5rem]" />
       <div className="section-shell">
         <motion.div
           initial={{ opacity: 0, y: 20 }}
