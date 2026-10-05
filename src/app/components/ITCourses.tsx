@@ -64,7 +64,7 @@ export function ITCourses() {
       learnMoreHref: '/linux_info.html',
     },
     {
-      title: 'RHCSA & RHCE Exam Preparation',
+      title: 'RHCSA & RHCE Exam Ready Course',
       description: 'Structured Red Hat certification prep with guided practice and mock tests.',
       duration: '3 Months',
       mode: 'Offline',

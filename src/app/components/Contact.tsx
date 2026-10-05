@@ -244,7 +244,7 @@ export function Contact() {
                     </optgroup>
                     <optgroup label="Advanced & Certification">
                       <option value="linux">Beginner Linux</option>
-                      <option value="rhcsa-rhce">RHCSA & RHCE Exam Preparation</option>
+                      <option value="rhcsa-rhce">RHCSA & RHCE Exam Ready Course</option>
                       <option value="devops-docker">DevOps & Docker</option>
                       <option value="aws-cloud">AWS Cloud for Beginner</option>
                     </optgroup>

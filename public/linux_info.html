@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>RHCSA Exam Ready Course (RHEL 9) | Sombhabona iHub</title>
-    <meta name="description" content="RHCSA Exam Ready Course on RHEL 9 at Sombhabona iHub: 25 hands-on classes mapped to the official RHCSA objectives, taught by Senior SRE Md Nazmul Alam. On-campus batch starts 10 Oct 2026.">
+    <meta name="description" content="RHCSA Exam Ready Course on RHEL 9 at Sombhabona iHub: 25 hands-on classes mapped to the official RHCSA objectives, taught by Senior SRE Md Nazmul Alam. On-campus batch starts 15 Oct 2026.">
     <link rel="icon" type="image/svg+xml" href="/favicon.svg">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -201,12 +201,21 @@
         .section-head p { margin: 0; color: var(--muted); line-height: 1.75; }
 
         /* Mentor */
+        /* Photo and bio side by side, experience as a full-width bar underneath */
         .mentor-grid {
             display: grid;
             grid-template-columns: minmax(260px, 0.8fr) minmax(0, 1.2fr);
-            gap: 40px;
+            grid-template-areas:
+                "photo info"
+                "exp   exp";
+            column-gap: 40px;
+            row-gap: 24px;
             align-items: start;
         }
+
+        .mentor-photo { grid-area: photo; }
+        .mentor-info { grid-area: info; }
+        .mentor-exp { grid-area: exp; }
 
         .mentor-photo {
             margin: 0;
@@ -293,23 +302,25 @@
             border-radius: 20px;
             background: var(--ink);
             color: #fff;
-            padding: 20px 24px;
-            margin-bottom: 16px;
+            padding: 22px 28px;
         }
+
+        .exp-summary { display: flex; align-items: center; gap: 20px; flex: 0 1 auto; }
 
         .exp-num { font-family: Fraunces, Georgia, serif; font-size: 3.6rem; font-weight: 800; line-height: 1; color: var(--yellow); }
         .exp strong { display: block; font-size: 1.2rem; }
-        .exp span { color: rgba(255, 255, 255, 0.72); }
+        .exp-summary div span { color: rgba(255, 255, 255, 0.72); }
 
-        .skill-row { display: flex; flex-wrap: wrap; gap: 8px; }
+        .skill-row { display: flex; flex-wrap: wrap; justify-content: flex-end; gap: 8px; margin-left: auto; }
 
         .skill {
             border-radius: 999px;
             padding: 8px 14px;
             font-size: 14px;
             font-weight: 700;
-            background: var(--card);
-            border: 1px solid var(--border);
+            color: #fff;
+            background: rgba(255, 255, 255, 0.08);
+            border: 1px solid rgba(255, 255, 255, 0.2);
         }
 
         /* Curriculum */
@@ -514,6 +525,11 @@
             .enroll-grid { grid-template-columns: 1fr; }
 
             .mentor-photo { max-width: 420px; }
+
+            .mentor-grid { grid-template-areas: "photo" "info" "exp"; }
+
+            .exp { flex-direction: column; align-items: flex-start; }
+            .skill-row { justify-content: flex-start; margin-left: 0; }
         }
 
         @media (max-width: 640px) {
@@ -527,7 +543,7 @@
             .class-item { grid-template-columns: 1fr; gap: 6px; padding: 18px; }
             .module summary { padding: 16px 18px; gap: 12px; }
             .lead-form { padding: 24px 20px; }
-            .exp { flex-direction: column; align-items: flex-start; gap: 8px; }
+            .exp-summary { flex-direction: column; align-items: flex-start; gap: 8px; }
         }
 
         @media (prefers-reduced-motion: reduce) {
@@ -558,7 +574,7 @@
             <div class="shell hero-grid">
                 <div>
                     <span class="eyebrow">$ RHCSA Exam Ready Course · RHEL 9</span>
-                    <h1>Learn RHCSA from an <em>expert</em>, one lab at a time</h1>
+                    <h1>Learn RHCSA from an <em>expert</em>, with Lab Facility</h1>
                     <p class="hero-lede">
                         25 hands-on classes mapped to the official Red Hat Certified System Administrator objectives on RHEL 9.
                         Every class ends with a practical lab, and the course closes with timed checkpoints and exam preparation.
@@ -570,7 +586,7 @@
                 </div>
 
                 <aside class="glance" aria-label="Course at a glance">
-                    <div class="glance-row"><span>Batch starts</span><strong class="hl">10 Oct 2026</strong></div>
+                    <div class="glance-row"><span>Batch starts</span><strong class="hl">15 Oct 2026</strong></div>
                     <div class="glance-row"><span>Format</span><strong>On-campus, Mirpur</strong></div>
                     <div class="glance-row"><span>Length</span><strong>25 classes · 10 modules</strong></div>
                     <div class="glance-row"><span>Platform</span><strong>RHEL 9</strong></div>
@@ -586,7 +602,7 @@
                     <img src="/images/mentor-nazmul-alam.jpg" alt="Md Nazmul Alam, RHCSA course mentor" width="400" height="400" loading="lazy">
                 </figure>
 
-                <div>
+                <div class="mentor-info">
                     <span class="eyebrow">Meet your mentor</span>
                     <div class="whoami">$ whoami</div>
                     <h2 class="mentor-name">Md Nazmul Alam</h2>
@@ -609,20 +625,25 @@
                         <div class="cert"><span class="cert-check" aria-hidden="true"></span><div><strong>CKA</strong><span>Certified Kubernetes Administrator</span></div></div>
                     </div>
 
+                </div>
+
+                <div class="mentor-exp">
                     <p class="sub-label">## Experience</p>
                     <div class="exp">
-                        <span class="exp-num">12+</span>
-                        <div>
-                            <strong>Years of experience</strong>
-                            <span>Linux system engineering and infrastructure, since 2014</span>
+                        <div class="exp-summary">
+                            <span class="exp-num">12+</span>
+                            <div>
+                                <strong>Years of experience</strong>
+                                <span>Linux system engineering and infrastructure, since 2014</span>
+                            </div>
                         </div>
-                    </div>
-                    <div class="skill-row">
-                        <span class="skill">Linux Administration</span>
-                        <span class="skill">Ansible &amp; Terraform</span>
-                        <span class="skill">Docker &amp; Kubernetes</span>
-                        <span class="skill">CI/CD Pipelines</span>
-                        <span class="skill">Monitoring</span>
+                        <div class="skill-row">
+                            <span class="skill">Linux Administration</span>
+                            <span class="skill">Ansible &amp; Terraform</span>
+                            <span class="skill">Docker &amp; Kubernetes</span>
+                            <span class="skill">CI/CD Pipelines</span>
+                            <span class="skill">Monitoring</span>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -632,7 +653,7 @@
             <div class="shell">
                 <div class="section-head">
                     <span class="eyebrow">## Curriculum</span>
-                    <h2>10 modules, 25 classes, every one hands-on</h2>
+                    <h2>10 modules, 25 classes, hands-on Lab</h2>
                     <p>
                         Each class lists the official RHCSA objectives it covers and the lab you complete before you leave.
                         Open a module to see its classes.
@@ -988,7 +1009,7 @@
                 <div>
                     <div class="section-head">
                         <span class="eyebrow">## Enroll</span>
-                        <h2>Reserve your seat for the 10 Oct 2026 batch</h2>
+                        <h2>Reserve your seat for the 15 Oct 2026 batch</h2>
                         <p>
                             Seats are limited for the on-campus batch. Leave your details and our admission team will call you
                             to confirm fees, schedule and seat availability.
@@ -997,7 +1018,7 @@
 
                     <div class="contact-list">
                         <a class="contact-item" href="tel:01835350647"><span aria-hidden="true">☎</span><div><small>Helpline</small><strong>01835350647</strong></div></a>
-                        <a class="contact-item" href="tel:01737243447"><span aria-hidden="true">☎</span><div><small>Helpline</small><strong>01737243447</strong></div></a>
+                        <a class="contact-item" href="tel:01737243447"><span aria-hidden="true">☎</span><div><small>Course Details</small><strong>01737243447</strong></div></a>
                         <div class="contact-item"><span aria-hidden="true">⌖</span><div><small>Campus</small><strong>756 West Sewrapara, Mirpur, Dhaka</strong></div></div>
                     </div>
                 </div>
@@ -1027,7 +1048,7 @@
                         <div class="field">
                             <label for="lead-course">Course</label>
                             <select id="lead-course" name="course" required>
-                                <option value="RHCSA Exam Ready Course (RHEL 9), batch 10 Oct 2026" selected>RHCSA Exam Ready (RHEL 9)</option>
+                                <option value="RHCSA Exam Ready Course (RHEL 9), batch 15 Oct 2026" selected>RHCSA Exam Ready (RHEL 9)</option>
                                 <option value="Beginner Linux">Beginner Linux</option>
                             </select>
                         </div>
